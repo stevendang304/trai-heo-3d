@@ -738,5 +738,70 @@ loop();
 <script>
   setTimeout(() => { const l = document.getElementById('loading'); if (l) l.textContent = 'Không tải được thư viện 3D. Vui lòng tải lại trang.'; }, 15000);
 </script>
+<style>
+  .card.mx{padding-right:36px !important}
+  .mintoggle{position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:#fff;cursor:pointer;font:700 15px/1 'Be Vietnam Pro',system-ui,sans-serif;color:var(--muted);display:grid;place-items:center;z-index:3;padding:0}
+  .mintoggle:hover{color:var(--accent);border-color:var(--accent)}
+  .minlabel{display:none;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);white-space:nowrap;cursor:pointer;user-select:none;line-height:24px}
+  .card.min{width:auto !important;max-height:none !important;overflow:visible !important;padding:6px 38px 6px 12px !important;display:block !important}
+  .card.min > :not(.mintoggle):not(.minlabel){display:none !important}
+  .card.min .minlabel{display:block}
+  body.ui-hidden .card:not(#info), body.ui-hidden #hint{display:none !important}
+  #uiDock{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+  #uiDock button{font:600 12px 'Be Vietnam Pro',system-ui,sans-serif;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(20,35,50,.14);backdrop-filter:blur(6px)}
+  #uiDock button:hover{border-color:var(--accent);color:var(--accent)}
+  #uiDock kbd{font:inherit;font-size:10.5px;color:var(--muted);margin-left:4px}
+  @media (max-width:900px){ #uiDock{bottom:auto;top:auto;left:14px;transform:none;bottom:14px} }
+</style>
+<div id="uiDock">
+  <button id="btnHideAll" title="Ẩn/hiện tất cả bảng (phím H)">Ẩn bảng <kbd>H</kbd></button>
+  <button id="btnMinAll" title="Thu gọn/mở rộng tất cả bảng (phím M)">Thu gọn <kbd>M</kbd></button>
+</div>
+<script>
+(() => {
+  const NAMES = { title: 'Thông tin trại', imps: document.querySelector('#imps h3') ? document.querySelector('#imps h3').textContent.split('·')[0].trim() : 'Điểm chính', views: 'Góc nhìn & hiển thị', legend: 'Chú giải' };
+  const KEY = 'farm3d-ui' + location.pathname;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} };
+  const cards = Object.keys(NAMES).map(id => document.getElementById(id)).filter(Boolean);
+  const titleEl = document.getElementById('title'), impsEl = document.getElementById('imps'), legendEl = document.getElementById('legend');
+  function relayout() {
+    if (!impsEl || !titleEl) return;
+    const tb = getComputedStyle(titleEl).display === 'none' ? 0 : titleEl.getBoundingClientRect().bottom;
+    const top = Math.max(14, tb + 10);
+    impsEl.style.top = top + 'px';
+    const lb = legendEl && getComputedStyle(legendEl).display !== 'none' ? legendEl.getBoundingClientRect().height + 24 : 14;
+    if (!impsEl.classList.contains('min')) impsEl.style.maxHeight = `calc(100% - ${top}px - ${lb}px)`;
+  }
+  function setMin(el, on) {
+    el.classList.toggle('min', on);
+    const b = el.querySelector(':scope > .mintoggle'); b.textContent = on ? '+' : '–'; b.title = on ? 'Mở rộng' : 'Thu gọn';
+    saved[el.id] = on; save(); requestAnimationFrame(relayout); dispatchEvent(new Event('resize'));
+  }
+  cards.forEach(el => {
+    el.classList.add('mx');
+    const lab = document.createElement('div'); lab.className = 'minlabel'; lab.textContent = NAMES[el.id]; lab.onclick = () => setMin(el, false);
+    const b = document.createElement('button'); b.className = 'mintoggle'; b.type = 'button';
+    b.onclick = e => { e.stopPropagation(); setMin(el, !el.classList.contains('min')); };
+    el.prepend(lab); el.appendChild(b);
+    const def = saved[el.id] ?? (innerWidth < 900 && el.id === 'views');
+    setMin(el, !!def);
+  });
+  const hideBtn = document.getElementById('btnHideAll'), minBtn = document.getElementById('btnMinAll');
+  function setHidden(on) { document.body.classList.toggle('ui-hidden', on); hideBtn.firstChild.textContent = on ? 'Hiện bảng ' : 'Ẩn bảng '; saved.__hidden = on; save(); requestAnimationFrame(relayout); dispatchEvent(new Event('resize')); }
+  function toggleMinAll() { const anyOpen = cards.some(c => !c.classList.contains('min')); cards.forEach(c => setMin(c, anyOpen)); minBtn.firstChild.textContent = anyOpen ? 'Mở rộng ' : 'Thu gọn '; }
+  hideBtn.onclick = () => setHidden(!document.body.classList.contains('ui-hidden'));
+  minBtn.onclick = toggleMinAll;
+  minBtn.firstChild.textContent = cards.every(c => c.classList.contains('min')) ? 'Mở rộng ' : 'Thu gọn ';
+  setHidden(!!saved.__hidden);
+  addEventListener('keydown', e => {
+    if (e.target.closest && e.target.closest('input,textarea,select')) return;
+    if (e.key === 'h' || e.key === 'H') setHidden(!document.body.classList.contains('ui-hidden'));
+    if (e.key === 'm' || e.key === 'M') toggleMinAll();
+  });
+  addEventListener('resize', relayout); setTimeout(relayout, 300);
+})();
+</script>
 </body>
 </html>
