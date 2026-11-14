@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trại heo 600 nái + 60.000 heo thịt — Mô hình 3D v2 (cải tiến)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#17212b;--muted:#5b6873;--line:rgba(23,33,43,.10);--card:rgba(255,255,255,.93);--accent:#2f7d8c;--warm:#d0763a}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:#d7e6ee;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)}
+  #app{position:fixed;inset:0}
+  #app canvas{display:block;touch-action:none}
+  .labels{position:absolute;inset:0;pointer-events:none}
+  .lbl{pointer-events:none;white-space:nowrap;font-weight:600;transform:translateY(-6px)}
+  .lbl.zone{background:rgba(17,26,35,.86);color:#fff;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .lbl.small{background:rgba(255,255,255,.94);color:var(--ink);font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .lbl.wind{color:#b4521c;font-size:13px;font-weight:700;text-shadow:0 1px 0 #fff,0 0 6px #fff}
+  .imp{pointer-events:auto;cursor:pointer;width:26px;height:26px;border-radius:50%;background:var(--warm);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.25);transition:transform .15s}
+  .imp:hover{transform:scale(1.15)}
+  .card{position:fixed;background:var(--card);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 28px rgba(20,35,50,.12)}
+  #title{top:14px;left:14px;padding:13px 15px;width:420px}
+  .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:18px;line-height:1.25;margin:4px 0 9px;font-weight:800}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .kpis div{border-top:2px solid var(--ink);padding-top:5px}
+  .kpis b{display:block;font-size:15px;font-weight:800}
+  .kpis span{display:block;font-size:10.5px;color:var(--muted);line-height:1.3;margin-top:2px}
+  .sowhat{margin-top:9px;font-size:11.8px;line-height:1.45;background:#fff6ee;border-left:3px solid var(--warm);padding:7px 9px;border-radius:4px}
+  #imps{top:268px;left:14px;width:420px;padding:10px 12px;max-height:calc(100% - 268px - 92px);overflow:auto}
+  #imps h3{margin:0 0 6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  #imps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+  #imps li{display:flex;gap:7px;align-items:flex-start;font-size:12px;line-height:1.3;padding:4px 4px;border-radius:6px;cursor:pointer}
+  #imps li:hover{background:#f2f5f7}
+  #imps li b{flex:none;width:19px;height:19px;border-radius:50%;background:var(--warm);color:#fff;font-size:10.5px;display:grid;place-items:center}
+  #views{top:14px;right:14px;padding:10px;display:flex;flex-direction:column;gap:5px;width:205px;max-height:calc(100% - 28px);overflow:auto}
+  #views .grp{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:3px 2px 0}
+  button.v{font:inherit;font-size:12.3px;font-weight:600;text-align:left;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  button.v:hover{border-color:var(--accent);color:var(--accent)}
+  button.v.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tg{display:flex;align-items:center;gap:8px;font-size:12.3px;padding:2px 2px;cursor:pointer;user-select:none}
+  .tg input{accent-color:var(--accent);width:15px;height:15px}
+  #info{right:233px;top:14px;width:330px;padding:14px 16px 12px;max-height:calc(100% - 28px);overflow:auto}
+  #info h2{font-size:16px;margin:4px 0 6px;font-weight:800;line-height:1.3;padding-right:20px}
+  #info .so{font-size:12.5px;line-height:1.45;margin:0 0 8px;background:#eef6f7;border-left:3px solid var(--accent);padding:6px 8px;border-radius:4px}
+  #info ul{margin:0;padding-left:16px}
+  #info li{font-size:12.5px;line-height:1.5;margin:3px 0}
+  #info .x{position:absolute;top:8px;right:10px;border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--muted)}
+  #legend{left:14px;bottom:14px;width:420px;padding:8px 12px;font-size:11px;display:flex;flex-wrap:wrap;gap:4px 12px}
+  #legend .h{width:100%;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  #legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid rgba(0,0,0,.12)}
+  #legend i.p{border-radius:50%}
+  #hint{position:fixed;bottom:14px;right:14px;font-size:11px;color:var(--muted);background:rgba(255,255,255,.82);padding:6px 10px;border-radius:8px;max-width:340px;text-align:right;line-height:1.4}
+  #loading{position:fixed;inset:0;display:grid;place-items:center;background:#d7e6ee;font-weight:600;font-size:14px;z-index:10;color:var(--muted)}
+  @media (max-height:860px){ #imps ol{grid-template-columns:1fr 1fr} }
+  @media (max-width:900px){
+    #title{width:calc(100% - 28px);padding:10px 12px} h1{font-size:15px} .kpis b{font-size:13px} .sowhat,#imps,#legend,#hint{display:none}
+    #views{top:auto;bottom:14px;width:175px;max-height:48%}
+    #info{left:14px;right:14px;top:auto;bottom:14px;width:auto;max-height:42%;margin-right:190px}
+  }
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div id="app"></div>
+
+<header class="card" id="title">
+  <div class="eyebrow">Mô hình 3D · Phiên bản 2 (cải tiến)</div>
+  <h1>Trại heo 600 nái + 60.000 heo thịt</h1>
+  <div class="kpis">
+    <div><b>≈ 29 ha</b><span>tổng quỹ đất (+5 ha so với v1)</span></div>
+    <div><b>4 khu</b><span>× 15.000 con, hàng rào riêng</span></div>
+    <div><b>1 nguồn</b><span>heo con / khu, AIAO theo khu</span></div>
+    <div><b id="kpiStaff">~50</b><span>nhân sự đang hoạt động</span></div>
+  </div>
+  <div class="sowhat"><b>So-what:</b> thêm khoảng 5 ha đất để đổi lấy giới hạn rủi ro: một ổ dịch chỉ ảnh hưởng tối đa 25% đàn thịt thay vì toàn bộ. Heo vào đi hành lang sạch, heo ra đi đường bẩn, xe cám có tuyến riêng, ba luồng này không giao cắt nhau.</div>
+</header>
+
+<section class="card" id="imps">
+  <h3>10 điểm cải tiến · click để xem</h3>
+  <ol id="impList"></ol>
+</section>
+
+<nav class="card" id="views">
+  <div class="grp">Góc nhìn</div>
+  <button class="v on" data-view="overview">Tổng thể</button>
+  <button class="v" data-view="sow">Cụm 1 · Trại nái</button>
+  <button class="v" data-view="log">Vùng đệm & hậu cần</button>
+  <button class="v" data-view="pods">4 khu heo thịt</button>
+  <button class="v" data-view="waste">Chất thải & biogas</button>
+  <div class="grp">Hoạt động</div>
+  <button class="v" data-view="act1">Cổng khu 1 · công nhân</button>
+  <button class="v" data-view="act2">Xuất heo khu 3</button>
+  <button class="v" data-view="act3">Trung chuyển heo con</button>
+  <div class="grp">Bên trong (mở mái)</div>
+  <button class="v" data-view="inFin">Dãy heo thịt</button>
+  <button class="v" data-view="inFarrow">Phòng nái đẻ</button>
+  <button class="v" data-view="inGest">Dãy nái chửa</button>
+  <div class="grp">Hiển thị</div>
+  <label class="tg"><input type="checkbox" id="tgLabels" checked> Nhãn & điểm cải tiến</label>
+  <label class="tg"><input type="checkbox" id="tgZone"> Phân vùng sạch / đệm / bẩn</label>
+  <label class="tg"><input type="checkbox" id="tgFlow"> Luồng di chuyển</label>
+  <label class="tg"><input type="checkbox" id="tgRoof"> Mở mái (xem đàn heo)</label>
+  <label class="tg"><input type="checkbox" id="tgAnim" checked> Hoạt động (người, xe)</label>
+  <label class="tg"><input type="checkbox" id="tgWind" checked> Hướng gió</label>
+</nav>
+
+<aside class="card" id="info" hidden></aside>
+
+<div class="card" id="legend">
+  <span class="h">Đồng phục theo khu</span>
+  <span><i style="background:#2f4e8c"></i>Trại nái</span><span><i style="background:#3f8f4f"></i>Khu 1</span><span><i style="background:#1f8a8a"></i>Khu 2</span><span><i style="background:#8a8f2b"></i>Khu 3</span><span><i style="background:#6d4c9a"></i>Khu 4</span><span><i style="background:#e8b100"></i>Hậu cần</span><span><i style="background:#e0742d"></i>Chất thải</span><span><i style="background:#7f93a8"></i>Đang di chuyển (thường phục)</span>
+  <span class="h">Luồng (bật "Luồng di chuyển")</span>
+  <span><i class="p" style="background:#2f6fd6"></i>Người</span><span><i class="p" style="background:#f08fa0"></i>Heo vào</span><span><i class="p" style="background:#d64541"></i>Heo xuất</span><span><i class="p" style="background:#e8b100"></i>Cám</span><span><i class="p" style="background:#8a5a2b"></i>Chất thải</span><span><i class="p" style="background:#3a1f1f"></i>Xác heo</span>
+</div>
+<div id="hint">Kéo để xoay · Cuộn để zoom · Chuột phải để di chuyển · Click công trình, khu đất hoặc số cam để xem chi tiết. Kích thước và vị trí chỉ mang tính minh hoạ. · <a href="../">Xem v3 (6.000 con)</a> · <a href="../v1/">v1</a></div>
+<div id="loading">Đang dựng mô hình trại v2…</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+const app = document.getElementById('app');
+const W = () => app.clientWidth, H = () => app.clientHeight;
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(W(), H());
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+app.appendChild(renderer.domElement);
+const labelR = new CSS2DRenderer(); labelR.setSize(W(), H()); labelR.domElement.className = 'labels'; app.appendChild(labelR.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#d7e6ee'); scene.fog = new THREE.Fog('#d7e6ee', 1600, 3600);
+const camera = new THREE.PerspectiveCamera(38, W() / H(), 0.5, 6000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI / 2.08; controls.minDistance = 6; controls.maxDistance = 2600;
+scene.add(new THREE.HemisphereLight('#e6f2ff', '#6f7d58', 0.95));
+const sun = new THREE.DirectionalLight('#fff4e2', 1.7);
+sun.position.set(-380, 620, 320); sun.target.position.set(0, 0, 0); sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -760, right: 760, top: 480, bottom: -480, near: 100, far: 1800 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.6; scene.add(sun, sun.target);
+
+const world = new THREE.Group(); scene.add(world);
+const interior = new THREE.Group(); interior.visible = false; scene.add(interior);
+const labelsG = new THREE.Group(); scene.add(labelsG);
+const windG = new THREE.Group(); scene.add(windG);
+const zoneG = new THREE.Group(); zoneG.visible = false; scene.add(zoneG);
+const flowG = new THREE.Group(); flowG.visible = false; scene.add(flowG);
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+const rng = mulberry32(600);
+const std = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, metalness: 0, ...o });
+const M = {
+  ground: std('#a3bc80'), pad: std('#d9d3c3'), padWaste: std('#d2cab6'), road: std('#8f8d88', { roughness: 0.95 }), roadDirty: std('#8c7b74', { roughness: 0.95 }),
+  concrete: std('#bdbab2'), wall: std('#f1efe9'),
+  roofSow: std('#4f8796', { roughness: 0.6, metalness: 0.2 }), roofFin: std('#cfd5d9', { roughness: 0.5, metalness: 0.35 }),
+  roofLog: std('#c9824a', { roughness: 0.6, metalness: 0.15 }), roofWaste: std('#5d6770', { roughness: 0.6, metalness: 0.2 }), roofRed: std('#9a3b33', { roughness: 0.6 }),
+  coolpad: std('#5fa89a'), fan: std('#2e3338', { roughness: 0.5 }),
+  silo: std('#dfe4e8', { roughness: 0.35, metalness: 0.3 }), steel: std('#b7c0c6', { roughness: 0.45, metalness: 0.15 }),
+  fence: new THREE.MeshStandardMaterial({ color: '#6f7a82', transparent: true, opacity: 0.5, depthWrite: false }),
+  water: std('#5b98a8', { roughness: 0.12, metalness: 0.15 }), dome: std('#1d2125', { roughness: 0.38, metalness: 0.1 }),
+  domeReserve: new THREE.MeshStandardMaterial({ color: '#1d2125', transparent: true, opacity: 0.35, roughness: 0.4 }),
+  berm: std('#9c8b6e'), pipe: std('#8a5a2b'), trunk: std('#6b4f36'), crown: std('#ffffff'),
+  slat: std('#5a5550'), plastic: std('#6f8ea3', { roughness: 0.6 }), feeder: std('#8e989f', { roughness: 0.5, metalness: 0.1 }),
+  pig: std('#ffffff', { roughness: 0.75 }), pigSolid: std('#f0b3a4', { roughness: 0.75 }), lamp: new THREE.MeshBasicMaterial({ color: '#ffb347' }),
+  bin: std('#b8322a'), dark: std('#3b4249'),
+};
+const geoBox = new THREE.BoxGeometry(1, 1, 1);
+const cylGeo = new THREE.CylinderGeometry(1, 1, 1, 24);
+function addBox(parent, w, h, d, x, y, z, mat, cast = true) {
+  const m = new THREE.Mesh(geoBox, mat); m.scale.set(w, h, d); m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = true; parent.add(m); return m;
+}
+const roofCache = new Map();
+function roofGeo(w, rh, L) {
+  const k = `${w}|${rh}|${L}`; if (roofCache.has(k)) return roofCache.get(k);
+  const s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(0, rh); s.closePath();
+  const g = new THREE.ExtrudeGeometry(s, { depth: L, bevelEnabled: false }); g.translate(0, 0, -L / 2); g.rotateY(Math.PI / 2); roofCache.set(k, g); return g;
+}
+class Batch {
+  constructor(geo, mat, parent, opts = {}) { this.geo = geo; this.mat = mat; this.parent = parent; this.o = opts; this.ms = []; this.cs = []; this.d = new THREE.Object3D(); }
+  add(x, y, z, sx, sy, sz, ry = 0, color) { const d = this.d; d.position.set(x, y, z); d.rotation.set(0, ry, 0); d.scale.set(sx, sy, sz); d.updateMatrix(); this.ms.push(d.matrix.clone()); if (color) this.cs.push(color); }
+  build() {
+    const im = new THREE.InstancedMesh(this.geo, this.mat, this.ms.length); this.ms.forEach((m, i) => im.setMatrixAt(i, m));
+    if (this.cs.length === this.ms.length && this.cs.length) this.cs.forEach((c, i) => im.setColorAt(i, c));
+    im.castShadow = !!this.o.cast; im.receiveShadow = this.o.receive !== false; this.parent.add(im); return im;
+  }
+}
+const fanGeo = new THREE.CylinderGeometry(0.65, 0.65, 0.25, 14); fanGeo.rotateZ(Math.PI / 2);
+const B = {
+  pads: new Batch(geoBox, M.coolpad, world, { cast: true }), fans: new Batch(fanGeo, M.fan, world),
+  rails: new Batch(geoBox, M.steel, interior), innerW: new Batch(geoBox, M.wall, interior), slats: new Batch(geoBox, M.slat, interior),
+  plastic: new Batch(geoBox, M.plastic, interior), feeders: new Batch(geoBox, M.feeder, interior),
+  pigs: new Batch(new THREE.SphereGeometry(0.5, 7, 5), M.pig, interior), lamps: new Batch(new THREE.SphereGeometry(0.16, 6, 4), M.lamp, interior, { receive: false }),
+};
+const pigC = () => new THREE.Color().setHSL(0.025, 0.58, 0.79 + (rng() - 0.5) * 0.07);
+const sowC = () => new THREE.Color().setHSL(0.03, 0.5, 0.72 + (rng() - 0.5) * 0.06);
+const boarC = () => new THREE.Color().setHSL(0.04, 0.35, 0.55 + (rng() - 0.5) * 0.06);
+const pigletC = () => new THREE.Color().setHSL(0.02, 0.65, 0.84);
+
+const pick = [], roofs = [], smallLabels = [];
+function label(text, x, y, z, kind = 'small', parent = labelsG) {
+  const d = document.createElement('div'); d.className = 'lbl ' + kind; d.textContent = text;
+  const o = new CSS2DObject(d); o.position.set(x, y, z); parent.add(o); if (kind === 'small') smallLabels.push(o); return o;
+}
+const tf = (cx, cz, rot) => { const c = Math.cos(rot), s = Math.sin(rot); return (lx, lz) => [cx + lx * c + lz * s, cz - lx * s + lz * c]; };
+function building(o) {
+  const rot = o.rot || 0, h = o.h || 2.8, L = o.len, Wd = o.wid;
+  const g = new THREE.Group(); g.position.set(o.cx, 0, o.cz); g.rotation.y = rot;
+  addBox(g, L + 1.2, 0.3, Wd + 1.2, 0, 0.15, 0, M.concrete, false);
+  const wy = 0.3 + h / 2;
+  addBox(g, L, h, 0.25, 0, wy, -Wd / 2, M.wall); addBox(g, L, h, 0.25, 0, wy, Wd / 2, M.wall);
+  addBox(g, 0.25, h, Wd, -L / 2, wy, 0, M.wall); addBox(g, 0.25, h, Wd, L / 2, wy, 0, M.wall);
+  const roof = new THREE.Mesh(roofGeo(Wd + 1.4, Math.max(1.2, Wd * 0.13), L + 1.0), o.roof);
+  roof.position.y = 0.3 + h; roof.castShadow = true; roof.receiveShadow = true; g.add(roof);
+  if (o.openable !== false) roofs.push(roof); else addBox(g, L, 0.1, Wd, 0, 0.3 + h, 0, M.wall);
+  const T = tf(o.cx, o.cz, rot);
+  if (o.vent !== false) {
+    const ps = o.padSide ?? -1;
+    let [x, z] = T(ps * (L / 2 + 0.2), 0); B.pads.add(x, 0.3 + h * 0.46, z, 0.3, h * 0.75, Wd * 0.8, rot);
+    const nf = Math.max(2, Math.round(Wd / 4.2));
+    for (let i = 0; i < nf; i++) { const lz = -Wd / 2 + (Wd / nf) * (i + 0.5); [x, z] = T(-ps * (L / 2 + 0.15), lz); B.fans.add(x, 0.3 + h * 0.5, z, 1, 1, 1, rot); }
+  }
+  g.userData.info = o.info; world.add(g); pick.push(g); return T;
+}
+function pipe(a, b, r, mat = M.steel, parent = world) {
+  const A = new THREE.Vector3(...a), Bv = new THREE.Vector3(...b), d = Bv.clone().sub(A);
+  const m = new THREE.Mesh(cylGeo, mat); m.scale.set(r, d.length(), r); m.position.copy(A).add(Bv).multiplyScalar(0.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); m.castShadow = true; parent.add(m); return m;
+}
+const siloBody = new THREE.CylinderGeometry(1.6, 1.6, 6, 24), siloBot = new THREE.ConeGeometry(1.6, 1.6, 24), siloTop = new THREE.ConeGeometry(1.65, 1.0, 24);
+siloBot.rotateX(Math.PI);
+function silo(x, z, info) {
+  const g = new THREE.Group(); g.position.set(x, 0, z);
+  for (const [geo, y] of [[siloBody, 6.2], [siloBot, 2.4], [siloTop, 9.7]]) { const m = new THREE.Mesh(geo, M.silo); m.position.y = y; m.castShadow = true; m.receiveShadow = true; g.add(m); }
+  for (const [lx, lz] of [[1.1, 1.1], [-1.1, 1.1], [1.1, -1.1], [-1.1, -1.1]]) addBox(g, 0.16, 3.2, 0.16, lx, 1.6, lz, M.steel);
+  g.userData.info = info; world.add(g); pick.push(g); return g;
+}
+function pad(x0, z0, x1, z1, mat, info) {
+  const m = addBox(world, x1 - x0, 0.1, z1 - z0, (x0 + x1) / 2, 0.05, (z0 + z1) / 2, mat, false);
+  if (info) { m.userData.info = info; pick.push(m); } return m;
+}
+function road(cx, cz, lx, lz, mat = M.road) { addBox(world, lx, 0.1, lz, cx, 0.07, cz, mat, false); }
+function fence(x0, z0, x1, z1) {
+  const h = 2.2;
+  for (const [cx, cz, lx, lz] of [[(x0 + x1) / 2, z0, x1 - x0, 0.15], [(x0 + x1) / 2, z1, x1 - x0, 0.15], [x0, (z0 + z1) / 2, 0.15, z1 - z0], [x1, (z0 + z1) / 2, 0.15, z1 - z0]]) {
+    const m = addBox(world, lx, h, lz, cx, h / 2, cz, M.fence, false); m.receiveShadow = false;
+  }
+}
+function zone(x0, z0, x1, z1, color) {
+  const m = new THREE.Mesh(geoBox, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.26, depthWrite: false }));
+  m.scale.set(x1 - x0, 0.05, z1 - z0); m.position.set((x0 + x1) / 2, 0.35, (z0 + z1) / 2); zoneG.add(m);
+}
+const CLEAN = '#2e9e5b', BUF = '#e0a82e', DIRTY = '#d64541';
+
+/* ---------- interiors ---------- */
+function finisherInterior(T, rot) {
+  const L = 110, Wd = 15, rowD = 6.75;
+  for (const sgn of [-1, 1]) {
+    const rz = sgn * (0.75 + rowD / 2);
+    for (let i = 0; i <= 25; i++) { const [x, z] = T(-L / 2 + i * 4.4, rz); B.rails.add(x, 0.8, z, 0.07, 1.0, rowD, rot); }
+    let [x, z] = T(0, sgn * 0.78); B.rails.add(x, 0.8, z, L, 1.0, 0.07, rot);
+    [x, z] = T(0, sgn * (Wd / 2 - 1.1)); B.slats.add(x, 0.32, z, L - 0.3, 0.03, 2.0, rot);
+    for (let i = 0; i < 25; i++) {
+      const cx = -L / 2 + 4.4 * i + 2.2;
+      [x, z] = T(cx, sgn * 1.35); B.feeders.add(x, 0.65, z, 0.9, 0.7, 0.6, rot);
+      for (let k = 0; k < 25; k++) {
+        [x, z] = T(cx + (rng() - 0.5) * 3.4, sgn * (2.0 + rng() * 4.4));
+        B.pigs.add(x, 0.57, z, 0.45, 0.53, 1.15, rot + rng() * 6.283, pigC());
+      }
+    }
+  }
+}
+function gestInterior(T, rot) {
+  for (const sgn of [-1, 1]) {
+    const rc = sgn * 1.825;
+    for (let i = 0; i <= 120; i++) { const [x, z] = T(-39 + i * 0.65, rc); B.rails.add(x, 0.85, z, 0.04, 1.1, 2.25, rot); }
+    let [x, z] = T(0, sgn * 0.82); B.feeders.add(x, 0.45, z, 78, 0.3, 0.35, rot);
+    [x, z] = T(0, sgn * 3.45); B.slats.add(x, 0.32, z, 78, 0.03, 1.0, rot);
+    for (let i = 0; i < 120; i++) { [x, z] = T(-39 + 0.325 + i * 0.65, rc); B.pigs.add(x, 0.68, z, 0.5, 0.72, 1.75, rot, sowC()); }
+  }
+}
+function farrowInterior(T, rot) {
+  const L = 75;
+  let [x, z] = T(0, -5.5); B.innerW.add(x, 1.7, z, L, 2.8, 0.15, rot);
+  for (let r = 1; r < 6; r++) { [x, z] = T(-L / 2 + r * 12.5, 1.25); B.innerW.add(x, 1.7, z, 0.15, 2.8, 13.5, rot); }
+  [x, z] = T(0, 0); B.plastic.add(x, 0.33, z, L - 0.4, 0.04, 11.0, rot);
+  for (let r = 0; r < 6; r++) {
+    const x0 = -L / 2 + r * 12.5 + 0.25;
+    for (const rz of [-4.3, -1.9, 1.9, 4.3]) {
+      for (let i = 0; i <= 6; i++) { [x, z] = T(x0 + i * 2.0, rz); B.rails.add(x, 0.6, z, 0.05, 0.6, 2.4, rot); }
+      for (let i = 0; i < 6; i++) {
+        const cx = x0 + 1.0 + i * 2.0;
+        for (const b of [-0.32, 0.32]) { [x, z] = T(cx + b, rz); B.rails.add(x, 0.75, z, 0.04, 0.9, 2.1, rot); }
+        [x, z] = T(cx, rz); B.pigs.add(x, 0.62, z, 0.55, 0.62, 1.7, rot, sowC());
+        [x, z] = T(cx + 0.72, rz + (rz < 0 ? 0.8 : -0.8)); B.lamps.add(x, 1.15, z, 1, 1, 1, 0);
+        for (let k = 0; k < 10; k++) {
+          const side = k < 5 ? -1 : 1;
+          [x, z] = T(cx + side * (0.55 + rng() * 0.35), rz + (rng() - 0.5) * 2.0);
+          B.pigs.add(x, 0.42, z, 0.18, 0.2, 0.38, rot + rng() * 6.283, pigletC());
+        }
+      }
+    }
+  }
+}
+function giltInterior(T, rot) {
+  for (const sgn of [-1, 1]) {
+    const rz = sgn * (0.75 + 2.625);
+    for (let i = 0; i <= 6; i++) { const [x, z] = T(-34.5 + i * 5, rz); B.rails.add(x, 0.8, z, 0.06, 1.0, 5.25, rot); }
+    for (let i = 0; i < 6; i++) {
+      const cx = -34.5 + 2.5 + i * 5;
+      for (let k = 0; k < 9; k++) { const [x, z] = T(cx + (rng() - 0.5) * 3.6, rz + (rng() - 0.5) * 3.6); B.pigs.add(x, 0.65, z, 0.45, 0.66, 1.4, rot + rng() * 6.283, pigC()); }
+    }
+    const bz = sgn * 2.0;
+    for (let i = 0; i <= 7; i++) { const [x, z] = T(2 + i * 2.4, bz); B.rails.add(x, 0.8, z, 0.06, 1.1, 2.5, rot); }
+    let [x, z] = T(2 + 8.4, sgn * 3.25); B.rails.add(x, 0.8, z, 16.8, 1.1, 0.06, rot);
+    for (let i = 0; i < 7; i++) { [x, z] = T(3.2 + i * 2.4, bz); B.pigs.add(x, 0.72, z, 0.6, 0.8, 1.6, rot + (rng() - 0.5) * 1.2, boarC()); }
+  }
+  const [x, z] = T(24, 0); B.innerW.add(x, 1.7, z, 0.15, 2.8, 11.5, rot);
+}
+function nurseryInterior(T, rot) {
+  let [x, z] = T(0, 0); B.plastic.add(x, 1.0, z, 33, 0.08, 8.4, rot);
+  for (const sgn of [-1, 1]) {
+    const rz = sgn * 2.3;
+    for (let i = 0; i <= 6; i++) { [x, z] = T(-16.2 + i * 5.4, rz); B.rails.add(x, 1.4, z, 0.05, 0.7, 3.6, rot); }
+    [x, z] = T(0, sgn * 0.5); B.rails.add(x, 1.4, z, 32.4, 0.7, 0.05, rot);
+    for (let i = 0; i < 6; i++) {
+      const cx = -16.2 + 2.7 + i * 5.4;
+      for (let k = 0; k < 26; k++) { [x, z] = T(cx + (rng() - 0.5) * 4.6, rz + (rng() - 0.5) * 2.9); B.pigs.add(x, 1.2, z, 0.26, 0.3, 0.62, rot + rng() * 6.283, pigC()); }
+    }
+  }
+}
+
+
+
+/* ===================== LAYOUT ===================== */
+const Z = { sow: 'Cụm 1 · Trại nái 600 con', log: 'Vùng đệm & hậu cần', fin: 'Cụm 2 · Khu heo thịt', waste: 'Chất thải & năng lượng', dirty: 'Tuyến bẩn' };
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(3200, 1900), M.ground);
+ground.rotation.x = -Math.PI / 2; ground.position.x = 20; ground.receiveShadow = true; world.add(ground);
+
+/* ---- Pads ---- */
+pad(-495, -85, -325, 65, M.pad, { zone: Z.sow, title: 'Cụm 1 – Trại heo nái sinh sản (600 nái)',
+  headline: 'Giữ nguyên quy mô, bổ sung dải cây kép, lọc khí đầu vào và cách ly hậu bị nhập.',
+  lines: ['Diện tích ≈ 2,55 ha', 'Đầu ra 14.000–15.000 heo cai sữa/năm ≈ 280–300 con/tuần', '144 ô đẻ, 480 ô nái chửa, 2.500 chỗ cai sữa: khớp nhịp sản xuất theo tuần',
+    'Đồng phục navy, nhân sự không sang khu thịt', 'Đường bẩn phía bắc không còn chạy ngang trại nái'] });
+pad(-310, -60, -190, 160, M.pad, { zone: Z.log, title: 'Vùng đệm & Hậu cần trung tâm',
+  headline: 'Kiểm soát mọi người, xe và heo trước khi vào vùng sạch.',
+  lines: ['Cổng chính, trạm cân, sát trùng xe 3 cấp', 'Khu cách ly 48 giờ, kho cám tổng', 'Mới: trạm trung chuyển heo con, xe ngoài không vào trong trại', 'Diện tích ≈ 2,6 ha'] });
+pad(-460, 88, -328, 160, M.pad, { zone: Z.sow, title: 'Hạ tầng nước', headline: 'Nhu cầu ước tính 600–900 m³/ngày cho nước uống và cooling pad.',
+  lines: ['Giếng khoan, nhà xử lý nước, hồ chứa dự trữ, tháp nước', 'Đặt đầu hướng gió, trong vùng sạch', 'Đồng hồ nước theo từng khu: lượng uống giảm là dấu hiệu sớm của bệnh'] });
+pad(420, -110, 600, 130, M.padWaste, { zone: Z.waste, title: 'Xử lý chất thải & Năng lượng (nâng cấp)',
+  headline: 'Thiết kế theo kịch bản 600–1.200 m³/ngày, thay vì 250–300 m³/ngày như brief.',
+  lines: ['Tách ép trục vít 2 line', 'Biogas HDPE: 2 hầm vận hành ≈ 18.900 m³, cộng hầm số 3 dự phòng giai đoạn 2', 'Lọc H₂S, máy phát biogas cấp 70–80% điện quạt',
+    'Lắng → Aerotank → hồ sinh học, đạt QCVN 62-MT:2016/BTNMT', 'Diện tích ≈ 4,3 ha'] });
+
+/* ---- Roads ---- */
+road(5, 185, 1290, 10, M.roadDirty);        // public main road (dirty)
+road(640, 2.5, 10, 375, M.roadDirty);       // public east road
+road(234, -180, 812, 8, M.roadDirty);       // north dirty road
+road(-280, 62.5, 8, 245);                   // logistics spur
+road(-302.5, -40, 45, 6);                   // to sow gate
+road(-226, 0, 108, 8);                      // logistics → west feed road
+road(117, 0, 578, 10);                      // clean corridor
+road(-168, 0, 8, 320); road(117, 0, 12, 320); road(402, 0, 8, 320);   // feed roads
+road(-200, 66, 6, 132); road(-217.5, 132, 35, 6); road(-235, 172, 6, 26, M.roadDirty); // transfer lanes
+road(-240, -7, 6, 14);
+road(-505, 45, 6, 280); road(-470, -95, 70, 6); road(-526, 0, 42, 6);
+road(470, -95, 8, 30, M.roadDirty);
+
+/* ---- Fences ---- */
+fence(-495, -85, -325, 65); fence(420, -110, 600, 130); fence(-610, -25, -545, 25); fence(560, -165, 600, -128);
+const PODS = [
+  { id: 1, name: 'Tây Bắc', sz: -1, west: true, color: '#3f8f4f', colorName: 'xanh lá' },
+  { id: 2, name: 'Đông Bắc', sz: -1, west: false, color: '#1f8a8a', colorName: 'xanh ngọc' },
+  { id: 3, name: 'Tây Nam', sz: 1, west: true, color: '#8a8f2b', colorName: 'ô liu' },
+  { id: 4, name: 'Đông Nam', sz: 1, west: false, color: '#6d4c9a', colorName: 'tím' },
+];
+const colX = [-90, 40, 195, 325], colName = ['A', 'B', 'C', 'D'], padSideC = [-1, 1, -1, 1];
+for (const P of PODS) {
+  P.x0 = P.west ? -158 : 128; P.x1 = P.west ? 106 : 392;
+  P.z0 = P.sz < 0 ? -170 : 22; P.z1 = P.sz < 0 ? -22 : 170;
+  P.cols = P.west ? [0, 1] : [2, 3];
+  P.rows = [...Array(6)].map((_, r) => P.sz < 0 ? -156 + 23 * r : 41 + 23 * r);
+  P.showerX = P.west ? -25 : 260; P.genX = P.west ? -110 : 330; P.rampX = P.west ? 60 : 300; P.binX = P.west ? -120 : 230;
+  P.cx = (P.x0 + P.x1) / 2; P.cz = (P.z0 + P.z1) / 2;
+}
+
+/* ===================== CỤM 1: SOW ===================== */
+const sowInfo = (title, headline, lines) => ({ zone: Z.sow, title, headline, lines });
+[-66, -52].forEach((cz, i) => {
+  const T = building({ cx: -430, cz, len: 85, wid: 10, roof: M.roofSow, info: sowInfo(`Nái chờ phối & nái chửa · Dãy ${i + 1}/2`, '480 lồng cá thể trên 2 dãy, máng ăn định lượng tự động.',
+    ['Dãy này: 240 lồng (2 hàng × 120), lồng 0,65 × 2,25 m', 'Nền bê tông, rãnh thoát phân phía sau', 'Mới: lọc khí đầu vào tại giàn cooling pad']) });
+  gestInterior(T, 0);
+});
+{ const T = building({ cx: -430, cz: -32, len: 75, wid: 16, roof: M.roofSow, info: sowInfo('Khu nái đẻ · 6 phòng độc lập', '144 ô đẻ, 6 phòng × 24 ô, vệ sinh cuốn chiếu hàng tuần.',
+    ['Ô đẻ ≈ 4,8 m²', 'Sàn nhựa đan 100%, đèn sưởi úm', 'Nhịp 6 phòng ứng với chu kỳ 1 tuần cho mỗi đợt nái đẻ']) }); farrowInterior(T, 0); }
+{ const T = building({ cx: -430, cz: -10, len: 70, wid: 12, roof: M.roofSow, info: sowInfo('Khu hậu bị & đực giống', 'Nguồn thay đàn và tinh cho 600 nái.',
+    ['12 ô tập thể ≈ 108 nái hậu bị', '14 ô đơn đực giống 6 m²/ô', 'Hậu bị chỉ vào đây sau khi qua chuồng cách ly']) }); giltInterior(T, 0); }
+for (let i = 0; i < 8; i++) {
+  const T = building({ cx: -480 + i * 16, cz: 32, len: 34, wid: 9, rot: Math.PI / 2, roof: M.roofSow, info: sowInfo(`Heo cai sữa (4–10 tuần) · Dãy ${i + 1}/8`, 'Sàn nhựa đan nâng cao cách nền 0,7 m.',
+    ['Dãy này: 12 ô × 26 con ≈ 312 con', 'Tổng 8 dãy ≈ 2.500 con']) });
+  nurseryInterior(T, Math.PI / 2);
+}
+building({ cx: -350, cz: -40, len: 14, wid: 8, h: 3.2, roof: M.roofLog, vent: false, openable: false, info: sowInfo('Nhà tắm, thay đồ & sát trùng (trại nái)', 'Lối vào duy nhất vào cụm nái.', ['Đi một chiều từ bẩn sang sạch', 'Đồng phục navy']) });
+for (const z of [-59, -43.5, -20]) silo(-482, z, sowInfo('Silo cám trại nái', 'Xe bồn bơm cám từ đường ngoài hàng rào phía tây.', ['15–20 tấn']));
+/* Gilt quarantine */
+{
+  const T = building({ cx: -577, cz: 0, len: 40, wid: 12, roof: M.roofRed, info: { zone: 'Cải tiến #5', title: 'Chuồng cách ly hậu bị nhập', headline: 'Hậu bị mới được cách ly 4–6 tuần ngoài hàng rào trại nái.',
+    lines: ['8 ô × 2 hàng × 6 con ≈ 96 chỗ', 'Nhân sự và dụng cụ riêng', 'Xét nghiệm và thích nghi trước khi nhập đàn'] } });
+  for (const sgn of [-1, 1]) { const rz = sgn * 3.375;
+    for (let i = 0; i <= 8; i++) { const [x, z] = T(-18 + i * 4.5, rz); B.rails.add(x, 0.8, z, 0.06, 1, 5.25); }
+    for (let i = 0; i < 8; i++) for (let k = 0; k < 6; k++) { const [x, z] = T(-15.75 + i * 4.5 + (rng() - 0.5) * 3, rz + (rng() - 0.5) * 3.6); B.pigs.add(x, 0.65, z, 0.45, 0.66, 1.4, rng() * 6.28, pigC()); } }
+}
+/* Water */
+{
+  const g = new THREE.Group();
+  const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), std('#c2b48f')); shore.scale.set(38, 21, 1); shore.rotation.x = -Math.PI / 2; shore.position.set(-410, 0.22, 118); g.add(shore);
+  const p = new THREE.Mesh(new THREE.CircleGeometry(1, 48), M.water); p.scale.set(35, 18, 1); p.rotation.x = -Math.PI / 2; p.position.set(-410, 0.3, 118); g.add(p);
+  const tank = new THREE.Mesh(cylGeo, std('#e6e9ec', { metalness: 0.3, roughness: 0.4 })); tank.scale.set(4, 5, 4); tank.position.set(-345, 17, 142); tank.castShadow = true; g.add(tank);
+  for (const [lx, lz] of [[2.5, 2.5], [-2.5, 2.5], [2.5, -2.5], [-2.5, -2.5]]) addBox(g, 0.3, 14.5, 0.3, -345 + lx, 7.25, 142 + lz, M.steel);
+  g.userData.info = { zone: 'Cải tiến #8', title: 'Hồ chứa & tháp nước', headline: 'Dự trữ cho vài ngày vận hành, cấp áp lực cho toàn trại.', lines: ['Nhu cầu ước tính 600–900 m³/ngày', 'Nước được xử lý trước khi cấp cho chuồng'] };
+  world.add(g); pick.push(g);
+}
+building({ cx: -350, cz: 112, len: 14, wid: 10, h: 4, roof: M.roofLog, vent: false, openable: false, info: { zone: 'Cải tiến #8', title: 'Giếng khoan & nhà xử lý nước', headline: 'Nước sạch là đầu vào an toàn sinh học.', lines: ['Lọc, khử trùng, kiểm tra định kỳ', 'Bộ châm Dosatron đặt ở bể đầu mỗi dãy chuồng'] } });
+
+/* ===================== LOGISTICS ===================== */
+const logInfo = (title, headline, lines) => ({ zone: Z.log, title, headline, lines });
+building({ cx: -240, cz: -30, len: 50, wid: 25, h: 8, roof: M.roofLog, vent: false, openable: false, info: logInfo('Kho cám tổng', 'Trung chuyển cám ra 3 tuyến xe cám riêng.', ['Ước tính trại tiêu thụ 35–40 nghìn tấn cám/năm', 'Khoảng 5–7 chuyến xe bồn/ngày']) });
+building({ cx: -240, cz: 22, len: 40, wid: 12, h: 3.5, roof: M.roofLog, vent: false, openable: false, info: logInfo('Khu nghỉ cách ly 48 giờ', 'Nhân sự ở đây 48 giờ rồi đi theo tuyến riêng đến nhà tắm của đúng khu mình.', ['Phòng ở, nhà ăn, giặt sấy', 'Tách tuyến cho nhân sự cụm nái và từng khu thịt']) });
+{
+  const g = new THREE.Group(); const cols = ['#4aa3df', '#3cbfae', '#7bc96f'];
+  [125, 108, 91].forEach((z, i) => {
+    addBox(g, 0.4, 5, 14, -283.2, 2.5, z, M.wall); addBox(g, 0.4, 5, 14, -276.8, 2.5, z, M.wall); addBox(g, 7.2, 0.35, 14, -280, 5.15, z, M.roofLog);
+    const mist = new THREE.Mesh(geoBox, new THREE.MeshStandardMaterial({ color: cols[i], transparent: true, opacity: 0.28, depthWrite: false })); mist.scale.set(6, 4.6, 13.6); mist.position.set(-280, 2.4, z); g.add(mist);
+  });
+  g.userData.info = logInfo('Nhà sát trùng xe tự động 3 cấp', 'Mọi xe vào trại đi qua 3 cổng phun liên tiếp.', ['Cấp 1 rửa bùn, cấp 2 phun sát trùng, cấp 3 sấy/ủ']); world.add(g); pick.push(g);
+}
+{
+  const g = new THREE.Group();
+  addBox(g, 4, 0.35, 18, -280, 0.2, 150, M.steel); addBox(g, 3, 3, 3, -272, 1.5, 150, M.wall); addBox(g, 3.6, 0.3, 3.6, -272, 3.15, 150, M.roofLog);
+  addBox(g, 0.5, 2.5, 0.5, -285, 1.25, 168, M.steel); addBox(g, 0.5, 2.5, 0.5, -275, 1.25, 168, M.steel); addBox(g, 10, 0.25, 0.25, -280, 2.3, 168, std('#d64541'));
+  g.userData.info = logInfo('Cổng chính & trạm cân điện tử', 'Cân xe cám, xe heo, xe nhân sự.', ['Bàn cân 18 m, camera biển số']); world.add(g); pick.push(g);
+}
+building({ cx: -235, cz: 146, len: 20, wid: 12, h: 3.5, roof: M.roofRed, vent: false, openable: false, info: { zone: 'Cải tiến #2', title: 'Trạm trung chuyển heo con', headline: 'Xe heo của trại vệ tinh dừng ở phía ngoài; heo đi qua cầu chuyển sang xe nội bộ sạch.',
+  lines: ['Phía nam (bẩn) là xe ngoài, phía bắc (sạch) là xe nội bộ', 'Ô tạm giữ, lấy mẫu xét nghiệm trước khi chuyển', 'Xe nội bộ chỉ chạy hành lang sạch đến cầu nhập của từng khu', 'Sát trùng cầu chuyển sau mỗi lượt'] } });
+
+/* ===================== FINISHER PODS ===================== */
+for (const P of PODS) {
+  const fInfo = { zone: Z.fin, title: `Khu thịt ${P.id} · ${P.name} · 15.000 con`, headline: `AIAO theo cả khu, 1 nguồn heo, đồng phục màu ${P.colorName}.`,
+    lines: ['12 dãy × 1.250 con, hàng rào riêng', 'Diện tích ≈ 3,9 ha', '6 silo, 1 máy phát dự phòng, 1 nhà tắm xuyên hàng rào', 'Cầu nhập ở hành lang sạch, cầu xuất ở hàng rào ngoài',
+      'Lệch pha khoảng 6 tuần giữa các khu (ước tính, chu kỳ 22–24 tuần)'] };
+  pad(P.x0, P.z0, P.x1, P.z1, M.pad, fInfo);
+  fence(P.x0, P.z0, P.x1, P.z1);
+  for (const c of P.cols) {
+    P.rows.forEach((cz, r) => {
+      const rowNo = P.sz < 0 ? r + 1 : r + 7;
+      const T = building({ cx: colX[c], cz, len: 110, wid: 15, roof: M.roofFin, padSide: padSideC[c],
+        info: { zone: `Khu thịt ${P.id}`, title: `Dãy ${P.id}-${colName[c]}${String(rowNo).padStart(2, '0')}`, headline: '1.250 con/dãy, Cùng vào – Cùng ra theo cả khu.',
+          lines: ['50 ô × 25 con, ≈ 1,19 m²/con', 'Nền bê tông đặc kết hợp tấm đan', 'Cooling pad và quạt hút biến tần', 'Dosatron tại bể đầu dãy, có đồng hồ nước riêng'] } });
+      finisherInterior(T, 0);
+    });
+    const pairs = P.sz < 0 ? [-144.5, -98.5, -52.5] : [52.5, 98.5, 144.5];
+    pairs.forEach((zm, k) => {
+      const xs = colX[c] + padSideC[c] * 61;
+      silo(xs, zm, { zone: `Khu thịt ${P.id}`, title: `Silo cám ${colName[c]}${k + 1} · cấp cho 2 dãy`, headline: '18 tấn, đủ khoảng 3 ngày cho 2.500 heo vỗ béo (ước tính).', lines: ['Xe cám đứng ngoài hàng rào, bơm vào silo'] });
+      for (const s of [-1, 1]) { const zb = zm + s * 11.5, xg = colX[c] + padSideC[c] * 55; pipe([xs, 3.0, zm], [xg, 3.0, zb - s * 6.5], 0.12); }
+    });
+  }
+  /* shower across fence */
+  building({ cx: P.showerX, cz: P.sz * 22, len: 12, wid: 8, h: 3.2, roof: M.roofRed, vent: false, openable: false,
+    info: { zone: 'Cải tiến #4', title: `Nhà tắm khu ${P.id} (xuyên hàng rào)`, headline: `Đi một chiều từ bẩn sang sạch; đồng phục khu ${P.id} màu ${P.colorName}.`, lines: ['Ngoài hàng rào: tủ đồ thường phục', 'Trong hàng rào: tủ đồng phục và ủng', 'Nhân sự không đi chéo giữa các khu'] } });
+  /* backup genset + beacon */
+  building({ cx: P.genX, cz: P.sz * 25.5, len: 8, wid: 5, h: 2.6, roof: M.roofWaste, vent: false, openable: false,
+    info: { zone: 'Cải tiến #7', title: `Máy phát dự phòng & báo động · Khu ${P.id}`, headline: 'Chuồng kín mất điện 30–60 phút có thể gây chết heo hàng loạt.', lines: ['Máy phát diesel tự khởi động (ATS)', 'Cảnh báo nhiệt độ và mất điện về điện thoại quản lý', 'Biogas chạy nền, diesel dự phòng'] } });
+  P.beacon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 10, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true })); P.beacon.position.set(P.genX, 4.5, P.sz * 25.5); world.add(P.beacon);
+  /* entry ramp (clean corridor) */
+  { const g = new THREE.Group(); addBox(g, 3.2, 0.25, 6, P.rampX, 0.13, P.sz * 19, M.concrete); addBox(g, 0.12, 1.2, 6, P.rampX - 1.6, 1.4, P.sz * 19, M.steel); addBox(g, 0.12, 1.2, 6, P.rampX + 1.6, 1.4, P.sz * 19, M.steel);
+    g.userData.info = { zone: 'Cải tiến #3', title: `Cầu nhập heo · Khu ${P.id}`, headline: 'Heo con vào từ hành lang sạch, xe nội bộ sạch.', lines: ['Nhận heo từ trạm trung chuyển', 'Nhập đầy cả khu trong 1–2 tuần'] }; world.add(g); pick.push(g); }
+  /* exit chute + ramp (dirty perimeter) */
+  { const g = new THREE.Group(); const zf = P.sz * 170, zd = P.sz * 163.5;
+    addBox(g, 0.12, 1.1, 6.5, P.rampX - 1.0, 0.85, (zf + zd) / 2, M.steel); addBox(g, 0.12, 1.1, 6.5, P.rampX + 1.0, 0.85, (zf + zd) / 2, M.steel);
+    addBox(g, 3.2, 0.25, 9, P.rampX, 0.13, P.sz * 174.5, M.concrete);
+    g.userData.info = { zone: 'Cải tiến #3', title: `Cầu xuất heo · Khu ${P.id}`, headline: 'Xe lái buôn chỉ đứng ở đường bẩn bên ngoài, không bao giờ vào trong.', lines: ['Heo đi một chiều ra ngoài, không quay lại', 'Sát trùng cầu xuất ngay sau mỗi lượt'] }; world.add(g); pick.push(g); }
+  /* carcass bins */
+  { const g = new THREE.Group(); for (let i = 0; i < 3; i++) addBox(g, 1.6, 1.3, 1.2, P.binX + i * 2.2, 0.75, P.sz * 174, M.bin);
+    g.userData.info = { zone: 'Cải tiến #6', title: `Thùng chứa xác · Khu ${P.id}`, headline: 'Đặt ở hàng rào ngoài, xe kéo tuyến bẩn đến thu gom.', lines: ['Công nhân trong khu đẩy xác ra qua cửa một chiều'] }; world.add(g); pick.push(g); }
+}
+
+/* ===================== WASTE ===================== */
+const wInfo = (title, headline, lines) => ({ zone: Z.waste, title, headline, lines });
+building({ cx: 450, cz: -90, len: 26, wid: 12, h: 6, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Trạm tách ép phân · 2 line', 'Gấp đôi công suất so với v1, có line dự phòng khi bảo trì.', ['Giảm 60–70% hữu cơ trước khi vào biogas']) });
+building({ cx: 485, cz: -90, len: 28, wid: 12, h: 5, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Nhà ủ & đóng bao phân vi sinh', 'Bã phân khô trở thành sản phẩm.', ['Ủ vi sinh, đóng bao']) });
+function lagoon(cx, cz, i, reserve) {
+  const g = new THREE.Group(), lx = 70, lz = 30;
+  addBox(g, lx + 6, 1.5, 3, cx, 0.75, cz - lz / 2 - 1.5, M.berm); addBox(g, lx + 6, 1.5, 3, cx, 0.75, cz + lz / 2 + 1.5, M.berm);
+  addBox(g, 3, 1.5, lz, cx - lx / 2 - 1.5, 0.75, cz, M.berm); addBox(g, 3, 1.5, lz, cx + lx / 2 + 1.5, 0.75, cz, M.berm);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 16, 0, Math.PI * 2, 0, Math.PI / 2), reserve ? M.domeReserve : M.dome);
+  dome.scale.set(lx / 2, reserve ? 2 : 4.2, lz / 2); dome.position.set(cx, 0.6, cz); dome.castShadow = !reserve; g.add(dome);
+  g.userData.info = reserve ? { zone: 'Cải tiến #9', title: 'Hầm biogas số 3 · dự phòng giai đoạn 2', headline: 'Quy hoạch sẵn mặt bằng nếu nước thải thực tế vượt 300 m³/ngày.', lines: ['+9.450 m³, nâng tổng lên ≈ 28.000 m³', 'Kích hoạt khi đo đạc thực tế 3–6 tháng đầu'] }
+    : wInfo(`Hầm biogas HDPE · Hầm ${i}`, 'Hầm kín thu khí để phát điện.', ['70 × 30 × 4,5 m ≈ 9.450 m³']);
+  world.add(g); pick.push(g);
+}
+lagoon(525, -50, 1); lagoon(525, -10, 2); lagoon(525, 30, 3, true);
+building({ cx: 450, cz: -20, len: 16, wid: 10, h: 4.5, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Nhà máy phát điện biogas', 'Cấp 70–80% điện năng cho quạt làm mát.', ['Chạy nền, diesel từng khu dự phòng']) });
+let flame;
+{ const g = new THREE.Group();
+  const s = new THREE.Mesh(cylGeo, M.steel); s.scale.set(2, 8, 2); s.position.set(445, 4, -3); s.castShadow = true; g.add(s);
+  const f = new THREE.Mesh(cylGeo, M.steel); f.scale.set(0.25, 11, 0.25); f.position.set(457, 5.5, -1); g.add(f);
+  flame = new THREE.Mesh(new THREE.ConeGeometry(0.6, 1.8, 10), new THREE.MeshBasicMaterial({ color: '#ff8a2a' })); flame.position.set(457, 11.9, -1); g.add(flame);
+  g.userData.info = wInfo('Tháp lọc H₂S & đuốc đốt khí dư', 'Lọc H₂S trước khi vào máy phát.', ['Đuốc đốt an toàn cho gas dư']); world.add(g); pick.push(g); }
+{ const g = new THREE.Group();
+  const wall = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 3, 40, 1, true), std('#bdbab2', { side: THREE.DoubleSide })); wall.position.set(452, 1.5, 75); g.add(wall);
+  const w = new THREE.Mesh(new THREE.CircleGeometry(8.9, 40), M.water); w.rotation.x = -Math.PI / 2; w.position.set(452, 2.5, 75); g.add(w);
+  g.userData.info = wInfo('Bể lắng', 'Lắng cặn sau biogas.', ['Bùn quay về trạm tách ép']); world.add(g); pick.push(g); }
+const bubbles = [];
+{ const g = new THREE.Group();
+  addBox(g, 34, 3, 0.4, 500, 1.5, 68, M.concrete); addBox(g, 34, 3, 0.4, 500, 1.5, 82, M.concrete); addBox(g, 0.4, 3, 14, 483, 1.5, 75, M.concrete); addBox(g, 0.4, 3, 14, 517, 1.5, 75, M.concrete);
+  addBox(g, 33.6, 0.1, 13.6, 500, 2.5, 75, M.water, false);
+  const bm = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.8 });
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 2; j++) { const b = new THREE.Mesh(new THREE.CircleGeometry(1.4, 16), bm); b.rotation.x = -Math.PI / 2; b.position.set(487 + i * 5.2, 2.58, 71 + j * 8); g.add(b); bubbles.push(b); }
+  g.userData.info = wInfo('Aerotank (có đất dự phòng mở rộng)', 'Xử lý hiếu khí.', ['Quy hoạch sẵn mặt bằng cho bể thứ 2']); world.add(g); pick.push(g); }
+{ const g = new THREE.Group();
+  const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), std('#c2b48f')); shore.scale.set(33, 23, 1); shore.rotation.x = -Math.PI / 2; shore.position.set(560, 0.22, 100); g.add(shore);
+  const p = new THREE.Mesh(new THREE.CircleGeometry(1, 48), M.water); p.scale.set(30, 20, 1); p.rotation.x = -Math.PI / 2; p.position.set(560, 0.3, 100); g.add(p);
+  g.userData.info = wInfo('Hồ sinh học', 'Bậc cuối trước khi xả hoặc tái sử dụng.', ['QCVN 62-MT:2016/BTNMT']); world.add(g); pick.push(g); }
+/* incinerator */
+building({ cx: 580, cz: -146, len: 16, wid: 10, h: 4, roof: M.roofRed, vent: false, openable: false, info: { zone: 'Cải tiến #6', title: 'Lò đốt xác heo', headline: 'Cuối hướng gió, nằm hoàn toàn trên tuyến bẩn.', lines: ['Xe kéo thu gom từ thùng chứa ở hàng rào ngoài các khu', 'Không giao cắt với tuyến sạch'] } });
+const chim = new THREE.Mesh(cylGeo, M.dark); chim.scale.set(0.6, 12, 0.6); chim.position.set(586, 6, -146); chim.castShadow = true; world.add(chim);
+/* manure pipes */
+for (const [a, b] of [[[-330, -85], [-330, -195]], [[-330, -195], [450, -195]], [[450, -195], [450, -96]], [[117, 175], [117, -195]]]) pipe([a[0], 0.6, a[1]], [b[0], 0.6, b[1]], 0.45, M.pipe);
+
+/* ===================== ZONING ===================== */
+zone(-495, -85, -325, 65, CLEAN); zone(-460, 88, -328, 160, CLEAN);
+for (const P of PODS) zone(P.x0, P.z0, P.x1, P.z1, CLEAN);
+zone(-310, -60, -190, 160, BUF); zone(-610, -25, -545, 25, BUF);
+zone(-172, -22, 406, 22, BUF); zone(106, -170, 128, -22, BUF); zone(106, 22, 128, 170, BUF); zone(-172, -170, -158, 170, BUF); zone(392, -170, 406, 170, BUF);
+zone(-640, 179, 650, 191, DIRTY); zone(-172, -185, 645, -171, DIRTY); zone(634, -185, 646, 191, DIRTY); zone(420, -110, 600, 130, DIRTY); zone(556, -168, 604, -126, DIRTY);
+for (const P of PODS) zone(P.rampX - 3, P.sz > 0 ? 170 : -179, P.rampX + 3, P.sz > 0 ? 179 : -170, DIRTY);
+
+/* ===================== TREES ===================== */
+const trunkB = new Batch(new THREE.CylinderGeometry(0.25, 0.35, 3, 6), M.trunk, world, { cast: true });
+const crownB = new Batch(new THREE.IcosahedronGeometry(2.8, 0), M.crown, world, { cast: true });
+function tree(x, z, s = 1) { const h = (0.8 + rng() * 0.5) * s; trunkB.add(x, 1.5 * h, z, h, h, h); crownB.add(x, 5.2 * h, z, h, h * (1 + rng() * 0.4), h, rng() * 6, new THREE.Color().setHSL(0.24 + rng() * 0.06, 0.38, 0.32 + rng() * 0.1)); }
+function belt(x0, z0, x1, z1, step, skip = () => false) { const n = Math.max(1, Math.round(Math.hypot(x1 - x0, z1 - z0) / step)); for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * i / n + (rng() - 0.5) * 2, z = z0 + (z1 - z0) * i / n + (rng() - 0.5) * 2; if (!skip(x, z)) tree(x, z); } }
+for (const off of [0, 7]) {   // double belt around sow site
+  belt(-500 - off, -92 - off, -320 + off, -92 - off, 6.5); belt(-317 + off, -85, -317 + off, 65, 6.5, (x, z) => Math.abs(z + 40) < 6);
+  belt(-512 - off, -85, -512 - off, 65, 6.5, (x, z) => Math.abs(z) < 6);
+}
+belt(-186, -60, -186, 160, 7, (x, z) => Math.abs(z) < 7);
+for (const zz of [-12, 12]) belt(-150, zz, 400, zz, 8, x => [60, 300, -25, 260, 117].some(v => Math.abs(x - v) < 9));
+belt(420, -118, 600, -118, 7, x => Math.abs(x - 470) < 6); belt(608, -110, 608, 130, 7); belt(420, 138, 600, 138, 7);
+belt(-330, -205, 600, -205, 9); belt(-330, -213, 600, -213, 9);
+const excl = [[-520, -112, -310, 75], [-620, -32, -538, 32], [-470, 82, -320, 166], [-315, -66, -183, 168], [-178, -190, 412, 178], [414, -124, 616, 146], [-700, 176, 760, 195], [-340, -220, 660, -170], [628, -200, 652, 200], [550, -170, 610, -120]];
+for (let i = 0; i < 1000; i++) { const x = -720 + rng() * 1480, z = -360 + rng() * 720; if (excl.some(([a, b, c, d]) => x > a && x < c && z > b && z < d)) continue; tree(x, z, 1.1); }
+for (const k in B) B[k].build(); trunkB.build(); crownB.build();
+
+/* ===================== PEOPLE & VEHICLES ===================== */
+function mkPath(pts) { const P = pts.map(p => ({ x: p[0], z: p[1] })); const cum = [0]; for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + Math.hypot(P[i].x - P[i - 1].x, P[i].z - P[i - 1].z)); return { P, cum, L: cum[cum.length - 1] }; }
+function sample(pa, s) { const { P, cum } = pa; let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const a = P[i - 1], b = P[i], seg = cum[i] - cum[i - 1] || 1, t = Math.min(1, Math.max(0, (s - cum[i - 1]) / seg)); return { x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t, dx: (b.x - a.x) / seg, dz: (b.z - a.z) / seg }; }
+class Mover {
+  constructor(obj, pts, o = {}) { this.obj = obj; this.path = mkPath(pts); this.speed = o.speed ?? 1.3; this.dwell = o.dwell ?? 3; this.y = o.y ?? 0.12; this.loop = !!o.loop; this.s = (o.start ?? 0) * this.path.L; this.dir = 1; this.wait = 0; this.moving = true; this.place(); }
+  update(dt) {
+    if (this.wait > 0) { this.wait -= dt; this.moving = false; return; }
+    this.moving = true; this.s += this.dir * this.speed * dt; const L = this.path.L;
+    if (this.loop) this.s = ((this.s % L) + L) % L;
+    else if (this.s >= L) { this.s = L; this.dir = -1; this.wait = this.dwell; } else if (this.s <= 0) { this.s = 0; this.dir = 1; this.wait = this.dwell; }
+    this.place();
+  }
+  place() { const p = sample(this.path, this.s); this.obj.position.set(p.x, this.y, p.z); const dx = p.dx * this.dir, dz = p.dz * this.dir; if (dx || dz) this.obj.rotation.y = Math.atan2(-dz, dx); }
+}
+const WG = { leg: new THREE.BoxGeometry(0.15, 0.8, 0.17), torso: new THREE.BoxGeometry(0.26, 0.62, 0.4), arm: new THREE.BoxGeometry(0.11, 0.58, 0.11), head: new THREE.SphereGeometry(0.13, 10, 8), boot: new THREE.BoxGeometry(0.24, 0.12, 0.18), cap: new THREE.CylinderGeometry(0.15, 0.15, 0.08, 10) };
+const skin = std('#d9a27e'), bootM = std('#f4f4f4'), matCache = {};
+const cm = c => matCache[c] ??= std(c, { roughness: 0.8 });
+function makeWorker(color, capColor) {
+  const g = new THREE.Group(), mc = cm(color), legs = [], arms = [];
+  const mk = (geo, mat, x, y, z, parent = g) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m; };
+  for (const side of [-1, 1]) {
+    const hip = new THREE.Group(); hip.position.set(0, 0.9, side * 0.1); g.add(hip); mk(WG.leg, mc, 0, -0.4, 0, hip); mk(WG.boot, bootM, 0.04, -0.83, 0, hip); legs.push(hip);
+    const sh = new THREE.Group(); sh.position.set(0, 1.46, side * 0.26); g.add(sh); mk(WG.arm, mc, 0, -0.28, 0, sh); arms.push(sh);
+  }
+  mk(WG.torso, mc, 0, 1.21, 0); mk(WG.head, skin, 0, 1.68, 0); mk(WG.cap, cm(capColor || color), 0, 1.79, 0);
+  g.scale.setScalar(1.05); world.add(g); return { g, legs, arms, phase: rng() * 6 };
+}
+const actors = []; let staff = 0;
+function walker(color, pts, o = {}) { const w = makeWorker(color, o.cap); const m = new Mover(w.g, pts, { speed: o.speed ?? (1.1 + rng() * 0.4), dwell: o.dwell ?? (2 + rng() * 5), y: o.y ?? 0.12, start: o.start ?? rng() }); actors.push({ kind: 'w', w, m, task: o.task || 'work' }); staff++; return m; }
+function station(color, x, z, yaw, task = 'work', y = 0.12, cap) { const w = makeWorker(color, cap); w.g.position.set(x, y, z); w.g.rotation.y = yaw; actors.push({ kind: 'w', w, m: null, task }); staff++; }
+function animWorker(w, moving, task, dt) {
+  if (moving) { w.phase += dt * 7; const a = Math.sin(w.phase) * 0.55; w.legs[0].rotation.z = a; w.legs[1].rotation.z = -a; w.arms[0].rotation.z = -a * 0.8; w.arms[1].rotation.z = a * 0.8; w.g.children.forEach(() => { }); }
+  else if (task === 'work') { w.phase += dt * 4; w.legs.forEach(l => l.rotation.z *= 0.85); w.arms[0].rotation.z = 1.0 + Math.sin(w.phase) * 0.35; w.arms[1].rotation.z = 0.6 + Math.cos(w.phase) * 0.3; }
+  else if (task === 'look') { w.phase += dt * 0.6; w.legs.forEach(l => l.rotation.z *= 0.85); w.arms.forEach(a => a.rotation.z *= 0.85); w.g.rotation.y += Math.sin(w.phase) * dt * 0.4; }
+  else { w.legs.forEach(l => l.rotation.z *= 0.85); w.arms.forEach(a => a.rotation.z *= 0.85); }
+}
+/* vehicles */
+function makeVehicle(type) {
+  const g = new THREE.Group();
+  const cab = { feed: '#e2e6ea', pigIn: '#3f8f4f', pigOut: '#b8322a', piglet: '#b8322a', bus: '#ffffff', tractor: '#8c2f2f', fork: '#e8b100', farm: '#e0742d' }[type];
+  if (type === 'bus') { addBox(g, 10, 2.6, 2.5, 0, 1.7, 0, std('#f4f4f4')); addBox(g, 9.6, 0.7, 2.55, 0, 2.3, 0, std('#3a4a5a')); }
+  else if (type === 'fork') { addBox(g, 2.4, 1.3, 1.2, 0, 0.9, 0, std(cab)); addBox(g, 0.15, 2.6, 1.0, 1.3, 1.3, 0, M.dark); addBox(g, 1.1, 0.08, 0.9, 1.9, 0.3, 0, M.dark); addBox(g, 1.2, 0.8, 1.0, 1.9, 0.75, 0, std('#c8a46a')); }
+  else if (type === 'tractor' || type === 'farm') {
+    addBox(g, 2.6, 1.4, 1.6, 2.2, 1.3, 0, std(cab)); addBox(g, 1.2, 1.2, 1.4, 1.6, 2.6, 0, std('#e9edf0'));
+    const wh = new THREE.CylinderGeometry(0.8, 0.8, 0.4, 14); wh.rotateX(Math.PI / 2);
+    for (const z of [-0.95, 0.95]) { const m = new THREE.Mesh(wh, M.dark); m.position.set(1.5, 0.8, z); g.add(m); }
+    addBox(g, 4, 1.0, 2.0, -1.4, 1.0, 0, type === 'tractor' ? M.bin : std('#7d6a50'));
+  } else {
+    addBox(g, 9, 0.8, 2.4, 0, 0.9, 0, M.dark); addBox(g, 2.2, 2.4, 2.4, 4.4, 2.2, 0, std(cab));
+    if (type === 'feed') { const t = new THREE.Mesh(cylGeo, std('#efe9d6', { roughness: 0.4, metalness: 0.3 })); t.scale.set(1.15, 6.4, 1.15); t.rotation.z = Math.PI / 2; t.position.set(-1, 2.4, 0); t.castShadow = true; g.add(t); }
+    else { addBox(g, 6.6, 2.4, 2.4, -1, 2.5, 0, std(type === 'pigIn' ? '#d9e6da' : '#e8d6d2')); for (let i = 0; i < 5; i++) addBox(g, 6.7, 0.12, 2.45, -1, 1.7 + i * 0.4, 0, M.dark); }
+  }
+  g.traverse(o => { if (o.isMesh) o.castShadow = true; }); world.add(g); return g;
+}
+function vehicle(type, pts, o = {}) { const v = makeVehicle(type); const m = new Mover(v, pts, { speed: o.speed ?? 7, dwell: o.dwell ?? 8, y: 0.12, start: o.start ?? rng() }); actors.push({ kind: 'v', m }); return m; }
+
+/* --- vehicles: clean & dirty routes never cross --- */
+vehicle('feed', [[-240, -14], [-240, 0], [-168, 0], [-168, -144]], { start: 0.1 });
+vehicle('feed', [[-240, -14], [-240, 0], [117, 0], [117, -99]], { start: 0.5 });
+vehicle('feed', [[-240, -14], [-240, 0], [402, 0], [402, 98]], { start: 0.8 });
+vehicle('feed', [[-240, -14], [-240, 0], [-168, 0], [-168, 145]], { start: 0.3 });
+vehicle('pigIn', [[-235, 132], [-200, 132], [-200, 0], [60, 0], [60, -12]], { speed: 6, dwell: 10, start: 0.2 });
+vehicle('pigIn', [[-235, 132], [-200, 132], [-200, 0], [300, 0], [300, 12]], { speed: 6, dwell: 10, start: 0.7 });
+vehicle('piglet', [[650, 185], [-235, 185], [-235, 162]], { speed: 9, dwell: 14, start: 0.4 });
+const mkt1 = vehicle('pigOut', [[640, 185], [60, 185]], { speed: 8, dwell: 30, start: 0.999 });
+const mkt2 = vehicle('pigOut', [[640, -180], [300, -180]], { speed: 8, dwell: 30, start: 0.6 });
+vehicle('tractor', [[-120, -180], [580, -180], [580, -160]], { speed: 5, dwell: 10, start: 0.3 });
+vehicle('bus', [[650, 185], [-280, 185], [-280, 40], [-255, 30]], { speed: 8, dwell: 15, start: 0.6 });
+vehicle('fork', [[-262, -14.5], [-218, -14.5]], { speed: 2.5, dwell: 3 });
+vehicle('farm', [[470, -97], [470, -80], [500, -80]], { speed: 3, dwell: 6 });
+
+/* --- workers --- */
+const SOW = '#2f4e8c', LOG = '#e8b100', WASTE = '#e0742d', TRANSIT = '#7f93a8', VET = '#f2f2f2';
+walker(SOW, [[-468, -66], [-392, -66]], { y: 0.3, dwell: 4 });
+walker(SOW, [[-392, -52], [-468, -52]], { y: 0.3, dwell: 4 });
+walker(SOW, [[-466, -38.75], [-394, -38.75]], { y: 0.3 });
+walker(SOW, [[-454, -32], [-443, -32]], { y: 0.3, speed: 0.6, dwell: 6 });
+walker(SOW, [[-417, -32], [-406, -32]], { y: 0.3, speed: 0.6, dwell: 6 });
+walker(SOW, [[-462, -10], [-410, -10]], { y: 0.3 });
+walker(SOW, [[-464, 17], [-464, 47]], { y: 1.04 });
+walker(SOW, [[-416, 47], [-416, 17]], { y: 1.04 });
+walker(VET, [[-345, -34], [-380, -34], [-380, 5], [-378, 10]], { cap: '#2f7d8c' });
+walker(SOW, [[-340, -60], [-340, -75], [-470, -75]], {});
+station('#8a6a3a', -560, 8, Math.PI, 'work');
+walker('#8a6a3a', [[-595, 0], [-559, 0]], { y: 0.3 });
+station('#2f7d8c', -338, 104, Math.PI / 2, 'work');
+/* logistics */
+station(LOG, -287, 172, Math.PI / 2, 'look', 0.12, '#17212b');
+[125, 108, 91].forEach(z => station(LOG, -274.5, z + 4, Math.PI, 'work'));
+station(LOG, -229, 139, Math.PI / 2, 'work'); station(LOG, -241, 139, Math.PI / 2, 'work');
+walker(LOG, [[-262, -18], [-218, -18]], {});
+/* transit (street clothes) between dorm and showers */
+walker(TRANSIT, [[-240, 14], [-240, 4], [-280, 4], [-280, -40], [-343, -40]], { cap: SOW });
+walker(TRANSIT, [[-240, 14], [-240, 4], [-25, 4], [-25, -16]], { cap: PODS[0].color });
+walker(TRANSIT, [[-240, 14], [-240, -4], [-30, -4], [-25, 16]], { cap: PODS[2].color });
+walker(TRANSIT, [[-240, 14], [-240, 4], [260, 4], [260, -16]], { cap: PODS[1].color });
+walker(TRANSIT, [[-240, 14], [-240, -4], [255, -4], [260, 16]], { cap: PODS[3].color });
+walker(TRANSIT, [[-246, 14], [-246, 6], [-205, 6]], { cap: LOG });
+/* pods */
+for (const P of PODS) {
+  const s = P.sz, xA = colX[P.cols[0]], xB = colX[P.cols[1]], innerRow = s < 0 ? -41 : 41, gapZ = s < 0 ? -52.5 : 52.5, gap2 = s < 0 ? -98.5 : 98.5;
+  walker(P.color, [[P.showerX, s * 27], [P.showerX, s * 30.5], [P.west ? -140 : 380, s * 30.5]], {});
+  walker(P.color, [[P.west ? -140 : 140, gapZ], [P.west ? 90 : 380, gapZ]], {});
+  walker(P.color, [[xA - 50, innerRow], [xA + 50, innerRow]], { y: 0.3, dwell: 5 });
+  walker(P.color, [[xB + 50, innerRow], [xB - 50, innerRow]], { y: 0.3, dwell: 5 });
+  walker(P.color, [[xA - 50, gap2 + s * 11.5], [xA + 50, gap2 + s * 11.5]], { y: 0.3, dwell: 5 });
+  station(P.color, colX[P.cols[0]] + padSideC[P.cols[0]] * 57, gap2, 0, 'work');
+}
+/* waste */
+station(WASTE, 450, -82, -Math.PI / 2, 'work'); station(WASTE, 485, -82, -Math.PI / 2, 'work');
+walker(WASTE, [[482, -72], [572, -72], [572, 52], [482, 52]], {});
+station('#8c2f2f', 571, -139, 0, 'work');
+/* pig loading: SW pod (x 60) & NE pod (x 300) */
+const pigGeo = new THREE.SphereGeometry(0.5, 10, 8);
+for (const [x, z0, z1] of [[60, 163.8, 183], [300, -163.8, -183]]) {
+  for (let i = 0; i < 12; i++) { const m = new THREE.Mesh(pigGeo, M.pigSolid); m.scale.set(1.15, 0.53, 0.45); m.castShadow = true; world.add(m);
+    actors.push({ kind: 'pig', truck: x === 60 ? mkt1 : mkt2, m: new Mover(m, [[x, z0], [x, z1]], { loop: true, speed: 0.9, y: 0.6, start: i / 12 }) }); }
+  station(PODS[x === 60 ? 2 : 1].color, x + 1.6, z0 + Math.sign(z1) * 1.0, Math.sign(z1) > 0 ? -Math.PI / 2 : Math.PI / 2, 'work');
+}
+document.getElementById('kpiStaff').textContent = staff;
+
+/* ===================== FLOWS ===================== */
+const flows = [];
+function flow(pts, color, speed = 18) {
+  const path = mkPath(pts), mat = new THREE.MeshBasicMaterial({ color }), n = Math.max(4, Math.round(path.L / 22)), dots = [];
+  for (let i = 0; i < n; i++) { const d = new THREE.Mesh(new THREE.SphereGeometry(1.3, 10, 8), mat); flowG.add(d); dots.push(d); }
+  const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(p => new THREE.Vector3(p[0], 4, p[1]))), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.55 }));
+  flowG.add(line); flows.push({ path, dots, speed, n });
+}
+flow([[-280, 185], [-280, 90], [-245, 28], [-280, 0], [-280, -40], [-343, -40]], '#2f6fd6', 10);
+flow([[-245, 16], [-245, 2], [-25, 2], [-25, -20]], '#2f6fd6', 10);
+flow([[-245, 16], [-245, 2], [260, 2], [260, 20]], '#2f6fd6', 10);
+flow([[650, 185], [-235, 185], [-235, 146], [-200, 132], [-200, -2], [60, -2], [60, -22]], '#f08fa0');
+flow([[-200, -2], [300, -2], [300, 22]], '#f08fa0');
+flow([[60, 160], [60, 189], [650, 189]], '#d64541'); flow([[300, -160], [300, -184], [645, -184]], '#d64541');
+flow([[-240, -18], [-240, 3], [-168, 3], [-168, -145]], '#e8b100'); flow([[-240, 3], [117, 3], [117, -145]], '#e8b100'); flow([[117, 3], [402, 3], [402, 145]], '#e8b100');
+flow([[-330, -85], [-330, -195], [450, -195], [450, -96], [525, -50], [525, -10], [452, 75], [500, 75], [560, 100]], '#8a5a2b', 12);
+flow([[117, 170], [117, -195]], '#8a5a2b', 12);
+flow([[-120, -174], [-120, -182], [580, -182], [580, -150]], '#3a1f1f', 12); flow([[-120, 174], [-120, 182], [-172, 182]], '#3a1f1f', 12);
+
+/* ===================== LABELS ===================== */
+label('Cụm 1 · Trại nái 600 con', -410, 26, -10, 'zone');
+label('Vùng đệm & hậu cần', -248, 26, 60, 'zone');
+for (const P of PODS) label(`Khu thịt ${P.id} · 15.000 con`, P.cx, 28, P.cz, 'zone');
+label('Xử lý chất thải & năng lượng', 510, 26, 10, 'zone');
+label('Hành lang sạch · heo vào, xe cám', 230, 7, 0); label('Đường bẩn · xe lái buôn, xe xác', 330, 6, -180); label('Đường công cộng (bẩn)', 330, 6, 189);
+label('Cách ly hậu bị', -577, 8, 0); label('Hồ chứa & tháp nước', -380, 22, 130); label('Trung chuyển heo con', -235, 8, 146);
+label('Cổng chính · trạm cân', -265, 7, 162); label('Cách ly 48 giờ', -240, 8, 22); label('Kho cám tổng', -240, 13, -30);
+for (const P of PODS) { label(`Nhà tắm khu ${P.id}`, P.showerX, 7, P.sz * 22); label('Cầu nhập', P.rampX, 4, P.sz * 17); label('Cầu xuất', P.rampX, 4, P.sz * 176); label('Máy phát dự phòng', P.genX, 7, P.sz * 25.5); }
+label('Lò đốt xác', 580, 10, -146); label('Hầm 3 · dự phòng', 525, 6, 30); label('Tách ép 2 line', 450, 11, -90);
+/* wind */
+const windMat = new THREE.MeshStandardMaterial({ color: '#e07a3a', transparent: true, opacity: 0.9 }); const windArrows = [];
+for (const x of [-470, -120, 230]) { const a = new THREE.Group(); const s = new THREE.Mesh(cylGeo, windMat); s.scale.set(1.5, 70, 1.5); s.rotation.z = -Math.PI / 2; a.add(s);
+  const h = new THREE.Mesh(new THREE.ConeGeometry(5, 14, 16), windMat); h.rotation.z = -Math.PI / 2; h.position.x = 42; a.add(h); a.position.set(x, 70, -250); windG.add(a); windArrows.push(a); }
+label('Gió đổi theo mùa (Tây Nam ↔ Đông Bắc): không thể chỉ dựa vào vị trí "đầu gió", cần dải cây kép và lọc khí', -60, 88, -250, 'wind', windG);
+{ const c = new THREE.Mesh(new THREE.ConeGeometry(6, 18, 3), std('#17212b')); c.rotation.x = -Math.PI / 2; c.position.set(-640, 1, -260); world.add(c); label('B (Bắc)', -640, 4, -278); }
+
+/* ===================== IMPROVEMENTS ===================== */
+const IMPS = [
+  { t: 'Chia khu thịt thành 4 khu độc lập', p: [117, 34, -95], v: [[430, 360, -360], [117, 0, 0]], h: 'Một ổ dịch chỉ ảnh hưởng tối đa 15.000 con (25%) thay vì 60.000.',
+    l: ['4 khu × 12 dãy × 1.250 con, hàng rào riêng từng khu', 'Cùng vào – Cùng ra theo cả khu, mỗi khu nhận 1 nguồn heo', 'Hành lang 44 m có dải cây xanh tách các khu', 'Lệch pha khoảng 6 tuần giữa các khu, mỗi lần nhập 15.000 con trong 1–2 tuần (ước tính)'] },
+  { t: 'Trạm trung chuyển heo con', p: [-235, 12, 146], v: [[-160, 70, 230], [-225, 0, 135]], h: 'Xe heo từ trại vệ tinh không bao giờ vào trong trại.',
+    l: ['Xe ngoài đứng phía nam, xe nội bộ sạch đứng phía bắc', 'Ô tạm giữ, lấy mẫu xét nghiệm trước khi chuyển', 'Sát trùng cầu chuyển sau mỗi lượt'] },
+  { t: 'Luồng heo một chiều', p: [60, 10, 176], v: [[82, 16, 192], [60, 0, 175]], h: 'Heo vào từ hành lang sạch, heo ra qua cầu xuất ở hàng rào ngoài.',
+    l: ['Cầu nhập ở phía hành lang (giữa các khu)', 'Cầu xuất ở hàng rào ngoài, nằm trên đường bẩn', 'Xe lái buôn, xe cám và xe nội bộ không giao cắt nhau'] },
+  { t: 'Nhà tắm & đồng phục riêng từng khu', p: [-25, 10, -22], v: [[20, 24, -62], [-25, 0, -24]], h: 'Mỗi khu một màu đồng phục, không đi chéo giữa các khu.',
+    l: ['Nhà tắm xuyên hàng rào, đi một chiều từ bẩn sang sạch', 'Khu 1 xanh lá, Khu 2 xanh ngọc, Khu 3 ô liu, Khu 4 tím, trại nái navy', 'Sau 48 giờ cách ly, nhân sự đi đúng tuyến đến khu của mình'] },
+  { t: 'Chuồng cách ly hậu bị nhập', p: [-577, 10, 0], v: [[-530, 60, 70], [-577, 0, 0]], h: 'Hậu bị mới được cách ly 4–6 tuần ngoài hàng rào trại nái.',
+    l: ['Đây là lỗ hổng an toàn sinh học lớn nhất của cụm nái trong v1', 'Có nhân sự và dụng cụ riêng'] },
+  { t: 'Lò đốt xác & tuyến bẩn riêng', p: [580, 12, -146], v: [[620, 70, -60], [560, 0, -160]], h: 'Xác heo đi theo tuyến bẩn, không quay lại vùng sạch.',
+    l: ['Thùng chứa ở hàng rào ngoài từng khu', 'Xe kéo chạy đường bẩn phía bắc', 'Lò đốt cuối hướng gió'] },
+  { t: 'Máy phát dự phòng & báo động', p: [-110, 9, -25.5], v: [[-80, 30, 10], [-110, 0, -26]], h: 'Mất điện 30–60 phút trong chuồng kín có thể gây chết heo hàng loạt.',
+    l: ['Mỗi khu 1 máy phát diesel tự khởi động (ATS)', 'Báo động nhiệt độ và mất điện về điện thoại', 'Biogas chạy nền, diesel dự phòng'] },
+  { t: 'Hạ tầng nước', p: [-390, 24, 118], v: [[-330, 80, 220], [-390, 0, 118]], h: 'Nhu cầu ước tính 600–900 m³/ngày; brief chưa có hạng mục này.',
+    l: ['Giếng, nhà xử lý nước, hồ chứa, tháp nước', 'Đồng hồ nước theo từng khu'] },
+  { t: 'Nâng công suất xử lý chất thải', p: [525, 10, 30], v: [[650, 140, 140], [510, 0, 10]], h: 'Thiết kế theo kịch bản 600–1.200 m³/ngày thay vì 250–300.',
+    l: ['Tách ép 2 line', 'Hầm biogas số 3 dự phòng (+9.450 m³)', 'Đất dự phòng mở rộng Aerotank'] },
+  { t: 'Dải cây kép & lọc khí cho trại nái', p: [-410, 12, -100], v: [[-330, 110, -200], [-410, 0, -40]], h: 'Gió đổi theo mùa nên không thể chỉ dựa vào vị trí đầu hướng gió.',
+    l: ['Dải cây kép quanh trại nái', 'Lọc khí tại giàn cooling pad chuồng nái', 'Đường bẩn không còn chạy ngang trại nái'] },
+];
+const impList = document.getElementById('impList');
+IMPS.forEach((it, i) => {
+  const data = { zone: `Cải tiến #${i + 1}`, title: it.t, headline: it.h, lines: it.l };
+  const go = () => { flyTo(it.v); showInfoData(data); };
+  const li = document.createElement('li'); li.innerHTML = `<b>${i + 1}</b><span>${it.t}</span>`; li.onclick = go; impList.appendChild(li);
+  const d = document.createElement('div'); d.className = 'imp'; d.textContent = i + 1; d.title = it.t; d.addEventListener('pointerdown', e => e.stopPropagation()); d.onclick = go;
+  const o = new CSS2DObject(d); o.position.set(...it.p); labelsG.add(o);
+});
+
+/* ===================== UI ===================== */
+const infoEl = document.getElementById('info');
+const selBox = new THREE.Box3Helper(new THREE.Box3(), 0xff7a1a); selBox.visible = false; scene.add(selBox);
+function showInfoData(i, obj) {
+  infoEl.innerHTML = `<button class="x" aria-label="Đóng">×</button><div class="eyebrow">${i.zone}</div><h2>${i.title}</h2>${i.headline ? `<p class="so">${i.headline}</p>` : ''}<ul>${i.lines.map(l => `<li>${l}</li>`).join('')}</ul>`;
+  infoEl.hidden = false; infoEl.querySelector('.x').onclick = hideInfo;
+  if (obj) { selBox.box.setFromObject(obj); selBox.visible = true; } else selBox.visible = false;
+}
+function hideInfo() { infoEl.hidden = true; selBox.visible = false; }
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+const shown = o => { while (o) { if (!o.visible) return false; o = o.parent; } return true; };
+function hitAt(e) {
+  const r = renderer.domElement.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera);
+  for (const h of ray.intersectObjects(pick, true)) { if (!shown(h.object)) continue; let o = h.object; while (o && !o.userData.info) o = o.parent; if (o) return o; }
+  return null;
+}
+let down = null;
+renderer.domElement.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
+renderer.domElement.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return; const o = hitAt(e); o ? showInfoData(o.userData.info, o) : hideInfo(); });
+let hoverPending = false;
+renderer.domElement.addEventListener('pointermove', e => { if (hoverPending || e.buttons) return; hoverPending = true; requestAnimationFrame(() => { renderer.domElement.style.cursor = hitAt(e) ? 'pointer' : 'grab'; hoverPending = false; }); });
+
+const tgRoof = document.getElementById('tgRoof');
+function setRoof(open) { roofs.forEach(r => r.visible = !open); interior.visible = open; tgRoof.checked = open; }
+tgRoof.onchange = () => setRoof(tgRoof.checked);
+document.getElementById('tgLabels').onchange = e => labelsG.visible = e.target.checked;
+document.getElementById('tgWind').onchange = e => windG.visible = e.target.checked;
+document.getElementById('tgZone').onchange = e => zoneG.visible = e.target.checked;
+document.getElementById('tgFlow').onchange = e => flowG.visible = e.target.checked;
+let animOn = true; document.getElementById('tgAnim').onchange = e => animOn = e.target.checked;
+
+const VIEWS = {
+  overview: [[-470, 760, 900], [-30, 0, 10], false],
+  sow: [[-300, 150, 150], [-415, 0, -15], false],
+  log: [[-150, 120, 230], [-245, 0, 60], false],
+  pods: [[430, 360, -360], [117, 0, 0], false],
+  waste: [[660, 160, 230], [510, 0, 10], false],
+  act1: [[20, 24, -62], [-25, 0, -24], false],
+  act2: [[82, 16, 192], [60, 0, 175], false],
+  act3: [[-160, 70, 230], [-225, 0, 135], false],
+  inFin: [[-60, 20, -18], [-90, 0, -41], true],
+  inFarrow: [[-412, 24, -6], [-436, 0, -34], true],
+  inGest: [[-405, 16, -36], [-425, 0, -59], true],
+};
+let tween = null;
+function flyTo(v, name) {
+  const [p, t, open] = Array.isArray(v) && v.length === 2 ? [v[0], v[1], undefined] : v;
+  tween = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...p), t1: new THREE.Vector3(...t), s: performance.now(), d: 1500 };
+  if (open !== undefined) setRoof(open);
+  document.querySelectorAll('button.v').forEach(b => b.classList.toggle('on', b.dataset.view === name));
+}
+document.querySelectorAll('button.v').forEach(b => b.onclick = () => flyTo(VIEWS[b.dataset.view], b.dataset.view));
+camera.position.set(...VIEWS.overview[0]); controls.target.set(...VIEWS.overview[1]);
+function applyOffset(){ camera.aspect = W() / H(); if (W() > 900) camera.setViewOffset(W(), H(), -110, 0, W(), H()); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
+applyOffset();
+addEventListener('resize', () => { applyOffset(); renderer.setSize(W(), H()); labelR.setSize(W(), H()); });
+
+/* ===================== LOOP ===================== */
+const tmp = new THREE.Vector3(), clock = new THREE.Clock(); let simT = 0;
+function loop() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (tween) { const k = Math.min(1, (performance.now() - tween.s) / tween.d), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    camera.position.lerpVectors(tween.p0, tween.p1, e); controls.target.lerpVectors(tween.t0, tween.t1, e); if (k >= 1) tween = null; }
+  controls.update();
+  if (animOn) {
+    simT += dt;
+    for (const a of actors) {
+      if (a.m) a.m.update(dt);
+      if (a.kind === 'w') animWorker(a.w, a.m ? a.m.moving : false, a.task, dt);
+      else if (a.kind === 'pig') { a.m.obj.position.y = 0.6 + Math.abs(Math.sin(simT * 8 + a.m.s)) * 0.06; a.m.obj.visible = a.truck.wait > 0 && a.truck.s >= a.truck.path.L - 0.01; }
+    }
+    for (const f of flows) f.dots.forEach((d, j) => { const p = sample(f.path, ((simT * f.speed) + j * f.path.L / f.n) % f.path.L); d.position.set(p.x, 4, p.z); });
+  }
+  const now = performance.now() / 1000;
+  windArrows.forEach((a, i) => a.position.x = [-470, -120, 230][i] + ((now * 18 + i * 20) % 60));
+  flame.scale.setScalar(0.85 + Math.sin(now * 13) * 0.15);
+  bubbles.forEach((b, i) => b.scale.setScalar(0.75 + 0.25 * Math.sin(now * 3 + i)));
+  for (const P of PODS) P.beacon.material.opacity = 0.35 + 0.65 * (Math.sin(now * 4 + P.id) > 0 ? 1 : 0.2);
+  for (const l of smallLabels) { l.getWorldPosition(tmp); l.visible = camera.position.distanceTo(tmp) < 430; }
+  renderer.render(scene, camera); labelR.render(scene, camera);
+  requestAnimationFrame(loop);
+}
+document.getElementById('loading').remove();
+loop();
+</script>
+<script>setTimeout(() => { const l = document.getElementById('loading'); if (l) l.textContent = 'Không tải được thư viện 3D. Vui lòng tải lại trang.'; }, 15000);</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trại heo 600 nái + 60.000 heo thịt — Mô hình 3D v2 (cải tiến)</title>
+<title>Trại heo 600 nái + 6.000 heo thịt — Mô hình 3D v3 (trại khép kín)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -68,19 +68,19 @@
 <div id="app"></div>
 
 <header class="card" id="title">
-  <div class="eyebrow">Mô hình 3D · Phiên bản 2 (cải tiến)</div>
-  <h1>Trại heo 600 nái + 60.000 heo thịt</h1>
+  <div class="eyebrow">Mô hình 3D · Phiên bản 3 · Trại khép kín</div>
+  <h1>Trại heo 600 nái + 6.000 heo thịt</h1>
   <div class="kpis">
-    <div><b>≈ 29 ha</b><span>tổng quỹ đất (+5 ha so với v1)</span></div>
-    <div><b>4 khu</b><span>× 15.000 con, hàng rào riêng</span></div>
-    <div><b>1 nguồn</b><span>heo con / khu, AIAO theo khu</span></div>
-    <div><b id="kpiStaff">~50</b><span>nhân sự đang hoạt động</span></div>
+    <div><b>≈ 8 ha</b><span>mặt bằng chức năng</span></div>
+    <div><b>100%</b><span>tự cung heo giống, 1 nguồn</span></div>
+    <div><b>~14.000</b><span>heo xuất chuồng/năm (ước tính)</span></div>
+    <div><b id="kpiStaff">~27</b><span>nhân sự đang hoạt động</span></div>
   </div>
-  <div class="sowhat"><b>So-what:</b> thêm khoảng 5 ha đất để đổi lấy giới hạn rủi ro: một ổ dịch chỉ ảnh hưởng tối đa 25% đàn thịt thay vì toàn bộ. Heo vào đi hành lang sạch, heo ra đi đường bẩn, xe cám có tuyến riêng, ba luồng này không giao cắt nhau.</div>
+  <div class="sowhat"><b>So-what:</b> 600 nái cho khoảng 280–300 heo cai sữa/tuần, vừa đủ lấp 6.000 chỗ thịt (≈ 2,3–2,5 lứa/năm). Trại khép kín không phải nhập heo con, nên rủi ro từ bên ngoài chỉ còn qua hậu bị nhập, người và xe. Toàn trại chạy theo nhịp tuần: 1 phòng đẻ → 1 dãy cai sữa → 1 phòng thịt.</div>
 </header>
 
 <section class="card" id="imps">
-  <h3>10 điểm cải tiến · click để xem</h3>
+  <h3>8 điểm chính của thiết kế · click để xem</h3>
   <ol id="impList"></ol>
 </section>
 
@@ -88,19 +88,19 @@
   <div class="grp">Góc nhìn</div>
   <button class="v on" data-view="overview">Tổng thể</button>
   <button class="v" data-view="sow">Cụm 1 · Trại nái</button>
-  <button class="v" data-view="log">Vùng đệm & hậu cần</button>
-  <button class="v" data-view="pods">4 khu heo thịt</button>
+  <button class="v" data-view="fin">Cụm 2 · Khu thịt</button>
+  <button class="v" data-view="log">Hậu cần & nước</button>
   <button class="v" data-view="waste">Chất thải & biogas</button>
   <div class="grp">Hoạt động</div>
-  <button class="v" data-view="act1">Cổng khu 1 · công nhân</button>
-  <button class="v" data-view="act2">Xuất heo khu 3</button>
-  <button class="v" data-view="act3">Trung chuyển heo con</button>
+  <button class="v" data-view="act1">Chuyển heo nội bộ</button>
+  <button class="v" data-view="act2">Xuất heo</button>
+  <button class="v" data-view="act3">Cổng & sát trùng</button>
   <div class="grp">Bên trong (mở mái)</div>
-  <button class="v" data-view="inFin">Dãy heo thịt</button>
+  <button class="v" data-view="inFin">Khu thịt · 20 phòng theo tuần</button>
   <button class="v" data-view="inFarrow">Phòng nái đẻ</button>
   <button class="v" data-view="inGest">Dãy nái chửa</button>
   <div class="grp">Hiển thị</div>
-  <label class="tg"><input type="checkbox" id="tgLabels" checked> Nhãn & điểm cải tiến</label>
+  <label class="tg"><input type="checkbox" id="tgLabels" checked> Nhãn & điểm chính</label>
   <label class="tg"><input type="checkbox" id="tgZone"> Phân vùng sạch / đệm / bẩn</label>
   <label class="tg"><input type="checkbox" id="tgFlow"> Luồng di chuyển</label>
   <label class="tg"><input type="checkbox" id="tgRoof"> Mở mái (xem đàn heo)</label>
@@ -111,14 +111,13 @@
 <aside class="card" id="info" hidden></aside>
 
 <div class="card" id="legend">
-  <span class="h">Đồng phục theo khu</span>
-  <span><i style="background:#2f4e8c"></i>Trại nái</span><span><i style="background:#3f8f4f"></i>Khu 1</span><span><i style="background:#1f8a8a"></i>Khu 2</span><span><i style="background:#8a8f2b"></i>Khu 3</span><span><i style="background:#6d4c9a"></i>Khu 4</span><span><i style="background:#e8b100"></i>Hậu cần</span><span><i style="background:#e0742d"></i>Chất thải</span><span><i style="background:#7f93a8"></i>Đang di chuyển (thường phục)</span>
+  <span class="h">Đồng phục</span>
+  <span><i style="background:#2f4e8c"></i>Trại nái</span><span><i style="background:#3f8f4f"></i>Khu thịt</span><span><i style="background:#e8b100"></i>Hậu cần</span><span><i style="background:#e0742d"></i>Chất thải</span><span><i style="background:#7f93a8"></i>Đang di chuyển</span>
   <span class="h">Luồng (bật "Luồng di chuyển")</span>
-  <span><i class="p" style="background:#2f6fd6"></i>Người</span><span><i class="p" style="background:#f08fa0"></i>Heo vào</span><span><i class="p" style="background:#d64541"></i>Heo xuất</span><span><i class="p" style="background:#e8b100"></i>Cám</span><span><i class="p" style="background:#8a5a2b"></i>Chất thải</span><span><i class="p" style="background:#3a1f1f"></i>Xác heo</span>
+  <span><i class="p" style="background:#2f6fd6"></i>Người</span><span><i class="p" style="background:#f08fa0"></i>Chuyển heo nội bộ</span><span><i class="p" style="background:#d64541"></i>Heo xuất</span><span><i class="p" style="background:#e8b100"></i>Cám</span><span><i class="p" style="background:#8a5a2b"></i>Chất thải</span><span><i class="p" style="background:#3a1f1f"></i>Xác heo</span>
 </div>
-<div id="hint">Kéo để xoay · Cuộn để zoom · Chuột phải để di chuyển · Click công trình, khu đất hoặc số cam để xem chi tiết. Kích thước và vị trí chỉ mang tính minh hoạ. · <a href="v1/">Xem bản v1</a></div>
-<div id="loading">Đang dựng mô hình trại v2…</div>
-
+<div id="hint">Kéo để xoay · Cuộn để zoom · Chuột phải để di chuyển · Click công trình, khu đất hoặc số cam để xem chi tiết. Kích thước và vị trí chỉ mang tính minh hoạ. · <a href="v2/">Xem v2 (60.000 con)</a> · <a href="v1/">v1</a></div>
+<div id="loading">Đang dựng mô hình trại v3…</div>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -336,229 +335,185 @@ function nurseryInterior(T, rot) {
 }
 
 
-
-/* ===================== LAYOUT ===================== */
-const Z = { sow: 'Cụm 1 · Trại nái 600 con', log: 'Vùng đệm & hậu cần', fin: 'Cụm 2 · Khu heo thịt', waste: 'Chất thải & năng lượng', dirty: 'Tuyến bẩn' };
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(3200, 1900), M.ground);
-ground.rotation.x = -Math.PI / 2; ground.position.x = 20; ground.receiveShadow = true; world.add(ground);
-
-/* ---- Pads ---- */
-pad(-495, -85, -325, 65, M.pad, { zone: Z.sow, title: 'Cụm 1 – Trại heo nái sinh sản (600 nái)',
-  headline: 'Giữ nguyên quy mô, bổ sung dải cây kép, lọc khí đầu vào và cách ly hậu bị nhập.',
-  lines: ['Diện tích ≈ 2,55 ha', 'Đầu ra 14.000–15.000 heo cai sữa/năm ≈ 280–300 con/tuần', '144 ô đẻ, 480 ô nái chửa, 2.500 chỗ cai sữa: khớp nhịp sản xuất theo tuần',
-    'Đồng phục navy, nhân sự không sang khu thịt', 'Đường bẩn phía bắc không còn chạy ngang trại nái'] });
-pad(-310, -60, -190, 160, M.pad, { zone: Z.log, title: 'Vùng đệm & Hậu cần trung tâm',
-  headline: 'Kiểm soát mọi người, xe và heo trước khi vào vùng sạch.',
-  lines: ['Cổng chính, trạm cân, sát trùng xe 3 cấp', 'Khu cách ly 48 giờ, kho cám tổng', 'Mới: trạm trung chuyển heo con, xe ngoài không vào trong trại', 'Diện tích ≈ 2,6 ha'] });
-pad(-460, 88, -328, 160, M.pad, { zone: Z.sow, title: 'Hạ tầng nước', headline: 'Nhu cầu ước tính 600–900 m³/ngày cho nước uống và cooling pad.',
-  lines: ['Giếng khoan, nhà xử lý nước, hồ chứa dự trữ, tháp nước', 'Đặt đầu hướng gió, trong vùng sạch', 'Đồng hồ nước theo từng khu: lượng uống giảm là dấu hiệu sớm của bệnh'] });
-pad(420, -110, 600, 130, M.padWaste, { zone: Z.waste, title: 'Xử lý chất thải & Năng lượng (nâng cấp)',
-  headline: 'Thiết kế theo kịch bản 600–1.200 m³/ngày, thay vì 250–300 m³/ngày như brief.',
-  lines: ['Tách ép trục vít 2 line', 'Biogas HDPE: 2 hầm vận hành ≈ 18.900 m³, cộng hầm số 3 dự phòng giai đoạn 2', 'Lọc H₂S, máy phát biogas cấp 70–80% điện quạt',
-    'Lắng → Aerotank → hồ sinh học, đạt QCVN 62-MT:2016/BTNMT', 'Diện tích ≈ 4,3 ha'] });
-
-/* ---- Roads ---- */
-road(5, 185, 1290, 10, M.roadDirty);        // public main road (dirty)
-road(640, 2.5, 10, 375, M.roadDirty);       // public east road
-road(234, -180, 812, 8, M.roadDirty);       // north dirty road
-road(-280, 62.5, 8, 245);                   // logistics spur
-road(-302.5, -40, 45, 6);                   // to sow gate
-road(-226, 0, 108, 8);                      // logistics → west feed road
-road(117, 0, 578, 10);                      // clean corridor
-road(-168, 0, 8, 320); road(117, 0, 12, 320); road(402, 0, 8, 320);   // feed roads
-road(-200, 66, 6, 132); road(-217.5, 132, 35, 6); road(-235, 172, 6, 26, M.roadDirty); // transfer lanes
-road(-240, -7, 6, 14);
-road(-505, 45, 6, 280); road(-470, -95, 70, 6); road(-526, 0, 42, 6);
-road(470, -95, 8, 30, M.roadDirty);
-
-/* ---- Fences ---- */
-fence(-495, -85, -325, 65); fence(420, -110, 600, 130); fence(-610, -25, -545, 25); fence(560, -165, 600, -128);
-const PODS = [
-  { id: 1, name: 'Tây Bắc', sz: -1, west: true, color: '#3f8f4f', colorName: 'xanh lá' },
-  { id: 2, name: 'Đông Bắc', sz: -1, west: false, color: '#1f8a8a', colorName: 'xanh ngọc' },
-  { id: 3, name: 'Tây Nam', sz: 1, west: true, color: '#8a8f2b', colorName: 'ô liu' },
-  { id: 4, name: 'Đông Nam', sz: 1, west: false, color: '#6d4c9a', colorName: 'tím' },
-];
-const colX = [-90, 40, 195, 325], colName = ['A', 'B', 'C', 'D'], padSideC = [-1, 1, -1, 1];
-for (const P of PODS) {
-  P.x0 = P.west ? -158 : 128; P.x1 = P.west ? 106 : 392;
-  P.z0 = P.sz < 0 ? -170 : 22; P.z1 = P.sz < 0 ? -22 : 170;
-  P.cols = P.west ? [0, 1] : [2, 3];
-  P.rows = [...Array(6)].map((_, r) => P.sz < 0 ? -156 + 23 * r : 41 + 23 * r);
-  P.showerX = P.west ? -25 : 260; P.genX = P.west ? -110 : 330; P.rampX = P.west ? 60 : 300; P.binX = P.west ? -120 : 230;
-  P.cx = (P.x0 + P.x1) / 2; P.cz = (P.z0 + P.z1) / 2;
+/* ===== Finisher barn with 5 weekly rooms (AIAO by room) ===== */
+const WASH = std('#7f9aa8', { roughness: 0.2, metalness: 0.1 });
+const washB = new Batch(geoBox, WASH, interior);
+function finisherRooms(T, rot, barnIdx) {
+  const L = 122, Wd = 15, rowD = 6.75, roomL = L / 5;
+  for (let r = 0; r < 5; r++) {
+    const w = barnIdx * 5 + r;                 // weekly batch index 0..19
+    const x0 = -L / 2 + r * roomL;
+    if (r > 0) { const [x, z] = T(x0, 0); B.innerW.add(x, 1.7, z, 0.15, 2.8, Wd - 0.3, rot); }
+    const empty = w === 19;
+    if (empty) { const [x, z] = T(x0 + roomL / 2, 0); washB.add(x, 0.33, z, roomL - 0.4, 0.03, Wd - 0.6, rot); }
+    const age = 10 + w * 16 / 18, k = (age - 10) / 16;             // weeks of age → growth 0..1
+    const sx = 0.32 + 0.16 * k, sy = 0.38 + 0.18 * k, sz = 0.8 + 0.42 * k;
+    for (const sgn of [-1, 1]) {
+      const rz = sgn * (0.75 + rowD / 2);
+      for (let i = 0; i <= 5; i++) { const [x, z] = T(x0 + 0.2 + i * 4.8, rz); B.rails.add(x, 0.8, z, 0.07, 1.0, rowD, rot); }
+      let [x, z] = T(x0 + roomL / 2, sgn * 0.78); B.rails.add(x, 0.8, z, roomL - 0.4, 1.0, 0.07, rot);
+      [x, z] = T(x0 + roomL / 2, sgn * (Wd / 2 - 1.1)); B.slats.add(x, 0.32, z, roomL - 0.4, 0.03, 2.0, rot);
+      for (let i = 0; i < 5; i++) {
+        const cx = x0 + 0.2 + 4.8 * i + 2.4;
+        [x, z] = T(cx, sgn * 1.35); B.feeders.add(x, 0.65, z, 0.9, 0.7, 0.6, rot);
+        if (empty) continue;
+        for (let p = 0; p < 30; p++) {
+          [x, z] = T(cx + (rng() - 0.5) * 3.8, sgn * (2.0 + rng() * 4.4));
+          B.pigs.add(x, 0.3 + sy / 2, z, sx, sy, sz, rot + rng() * 6.283, pigC());
+        }
+      }
+    }
+  }
 }
 
-/* ===================== CỤM 1: SOW ===================== */
+/* ===================== LAYOUT v3 ===================== */
+const Z = { sow: 'Cụm 1 · Trại nái 600 con', log: 'Hậu cần', fin: 'Cụm 2 · Khu thịt 6.000 con', waste: 'Chất thải & năng lượng' };
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(2400, 1500), M.ground);
+ground.rotation.x = -Math.PI / 2; ground.position.x = -230; ground.receiveShadow = true; world.add(ground);
+
+pad(-495, -85, -325, 65, M.pad, { zone: Z.sow, title: 'Cụm 1 – Trại heo nái sinh sản (600 nái)',
+  headline: 'Đầu ra 280–300 heo cai sữa/tuần, cấp đủ 100% heo giống cho khu thịt.',
+  lines: ['Diện tích ≈ 2,55 ha', '6 phòng đẻ × 24 ô: mỗi tuần 1 phòng (~26 nái đẻ/tuần)', '8 dãy cai sữa × ~312 con: mỗi tuần nhập 1 dãy, nuôi 6 tuần, rồi vệ sinh',
+    '480 ô nái chửa, 1 dãy hậu bị & đực giống', 'Đồng phục navy, nhân sự không sang khu thịt'] });
+pad(-470, 85, -350, 172, M.pad, { zone: Z.log, title: 'Hậu cần & cổng chính', headline: 'Mọi người và xe vào trại đều qua cổng này.',
+  lines: ['Trạm cân, sát trùng xe 3 cấp', 'Khu cách ly 48 giờ cho nhân sự', 'Kho vật tư, thuốc thú y', 'Không còn trạm trung chuyển heo con vì trại tự cung giống'] });
+pad(-470, -150, -350, -105, M.pad, { zone: Z.sow, title: 'Hạ tầng nước', headline: 'Nhu cầu ước tính 100–150 m³/ngày cho nước uống và cooling pad.',
+  lines: ['Giếng khoan, xử lý nước, hồ chứa, tháp nước', 'Đặt đầu hướng gió, trong vùng sạch'] });
+pad(-205, -70, -50, 55, M.pad, { zone: Z.fin, title: 'Cụm 2 – Khu nuôi heo thịt (6.000 chỗ)',
+  headline: '4 dãy × 5 phòng × 300 con. Mỗi tuần nhận 1 lứa ~280 con từ trại nái, Cùng vào – Cùng ra theo phòng.',
+  lines: ['Diện tích ≈ 1,9 ha', 'Chu kỳ 20 phòng ≈ 20 tuần: khoảng 16–17 tuần nuôi (10 → ~26 tuần tuổi) + vệ sinh + dự phòng', 'Xuất ≈ 13.500–14.500 con/năm (ước tính, hao hụt khoảng 3%)',
+    'Cách cụm nái khoảng 120 m, cuối hướng gió, hàng rào và nhà tắm riêng', 'Cầu nhập phía tây (đường sạch), cầu xuất phía bắc (đường bẩn)'] });
+pad(-20, -70, 110, 60, M.padWaste, { zone: Z.waste, title: 'Xử lý chất thải & năng lượng',
+  headline: 'Thiết kế cho khoảng 90–150 m³ nước thải/ngày (ước tính cho 600 nái + 6.000 thịt).',
+  lines: ['Tách ép trục vít 1 line', 'Biogas HDPE 1 hầm ≈ 5.900 m³, thời gian lưu ≈ 40–65 ngày (ước tính)', 'Máy phát biogas chạy nền cho quạt làm mát', 'Lắng → Aerotank → hồ sinh học, đạt QCVN 62-MT:2016/BTNMT', 'Diện tích ≈ 1,7 ha'] });
+
+/* Roads */
+road(-240, 180, 820, 10, M.roadDirty);   // public main road
+road(150, 50, 10, 270, M.roadDirty);      // public east road
+road(-5, -80, 310, 8, M.roadDirty);       // north dirty road (finisher exit, carcass)
+road(-440, 132, 8, 96);                   // logistics spur
+road(-362.5, 76, 291, 6);                 // clean internal road z76 (-505..-218)
+road(-220, 8, 8, 142);                    // finisher feed road
+road(-265, 45, 120, 6);                   // pig transfer road (sow → finisher)
+road(-505, 42.5, 6, 275);                 // sow west feed road
+road(-526, 0, 42, 6); road(-470, -95, 70, 6);
+road(-90, 66, 6, 20);                     // to finisher shower
+road(-370, 71, 6, 10);                    // to sow shower
+road(30, -77, 6, 14, M.roadDirty);
+
+/* Fences */
+fence(-495, -85, -325, 65); fence(-205, -70, -50, 55); fence(-20, -70, 110, 60); fence(-610, -25, -545, 25); fence(70, -102, 100, -86);
+
+/* ===================== SOW SITE ===================== */
 const sowInfo = (title, headline, lines) => ({ zone: Z.sow, title, headline, lines });
-[-66, -52].forEach((cz, i) => {
-  const T = building({ cx: -430, cz, len: 85, wid: 10, roof: M.roofSow, info: sowInfo(`Nái chờ phối & nái chửa · Dãy ${i + 1}/2`, '480 lồng cá thể trên 2 dãy, máng ăn định lượng tự động.',
-    ['Dãy này: 240 lồng (2 hàng × 120), lồng 0,65 × 2,25 m', 'Nền bê tông, rãnh thoát phân phía sau', 'Mới: lọc khí đầu vào tại giàn cooling pad']) });
-  gestInterior(T, 0);
-});
-{ const T = building({ cx: -430, cz: -32, len: 75, wid: 16, roof: M.roofSow, info: sowInfo('Khu nái đẻ · 6 phòng độc lập', '144 ô đẻ, 6 phòng × 24 ô, vệ sinh cuốn chiếu hàng tuần.',
-    ['Ô đẻ ≈ 4,8 m²', 'Sàn nhựa đan 100%, đèn sưởi úm', 'Nhịp 6 phòng ứng với chu kỳ 1 tuần cho mỗi đợt nái đẻ']) }); farrowInterior(T, 0); }
-{ const T = building({ cx: -430, cz: -10, len: 70, wid: 12, roof: M.roofSow, info: sowInfo('Khu hậu bị & đực giống', 'Nguồn thay đàn và tinh cho 600 nái.',
-    ['12 ô tập thể ≈ 108 nái hậu bị', '14 ô đơn đực giống 6 m²/ô', 'Hậu bị chỉ vào đây sau khi qua chuồng cách ly']) }); giltInterior(T, 0); }
+[-66, -52].forEach((cz, i) => { const T = building({ cx: -430, cz, len: 85, wid: 10, roof: M.roofSow, info: sowInfo(`Nái chờ phối & nái chửa · Dãy ${i + 1}/2`, '480 lồng cá thể, máng ăn định lượng.', ['Dãy này 240 lồng', 'Nái phối theo nhóm tuần, khoảng 26–28 nái/tuần']) }); gestInterior(T, 0); });
+{ const T = building({ cx: -430, cz: -32, len: 75, wid: 16, roof: M.roofSow, info: sowInfo('Khu nái đẻ · 6 phòng', 'Mỗi tuần 1 phòng (24 ô) vào đẻ, vệ sinh cuốn chiếu.', ['Ô đẻ ≈ 4,8 m², sàn nhựa, đèn úm', 'Cai sữa khoảng 21–24 ngày → chuyển nguyên lứa sang 1 dãy cai sữa']) }); farrowInterior(T, 0); }
+{ const T = building({ cx: -430, cz: -10, len: 70, wid: 12, roof: M.roofSow, info: sowInfo('Khu hậu bị & đực giống', 'Hậu bị vào đây sau khi qua chuồng cách ly.', ['≈ 108 chỗ hậu bị, 14 ô đực giống']) }); giltInterior(T, 0); }
 for (let i = 0; i < 8; i++) {
-  const T = building({ cx: -480 + i * 16, cz: 32, len: 34, wid: 9, rot: Math.PI / 2, roof: M.roofSow, info: sowInfo(`Heo cai sữa (4–10 tuần) · Dãy ${i + 1}/8`, 'Sàn nhựa đan nâng cao cách nền 0,7 m.',
-    ['Dãy này: 12 ô × 26 con ≈ 312 con', 'Tổng 8 dãy ≈ 2.500 con']) });
+  const T = building({ cx: -480 + i * 16, cz: 32, len: 34, wid: 9, rot: Math.PI / 2, roof: M.roofSow, info: sowInfo(`Heo cai sữa · Dãy ${i + 1}/8`, 'Mỗi dãy là 1 lứa tuần (~312 chỗ), nuôi 6 tuần rồi chuyển sang khu thịt.', ['Sàn nhựa nâng 0,7 m', 'Vòng 8 dãy = 6 tuần nuôi + vệ sinh + dự phòng']) });
   nurseryInterior(T, Math.PI / 2);
 }
-building({ cx: -350, cz: -40, len: 14, wid: 8, h: 3.2, roof: M.roofLog, vent: false, openable: false, info: sowInfo('Nhà tắm, thay đồ & sát trùng (trại nái)', 'Lối vào duy nhất vào cụm nái.', ['Đi một chiều từ bẩn sang sạch', 'Đồng phục navy']) });
-for (const z of [-59, -43.5, -20]) silo(-482, z, sowInfo('Silo cám trại nái', 'Xe bồn bơm cám từ đường ngoài hàng rào phía tây.', ['15–20 tấn']));
+building({ cx: -370, cz: 65, len: 12, wid: 8, h: 3.2, roof: M.roofRed, vent: false, openable: false, info: sowInfo('Nhà tắm trại nái (xuyên hàng rào)', 'Đi một chiều từ bẩn sang sạch, đồng phục navy.', ['Nối với khu cách ly 48 giờ qua đường nội bộ']) });
+for (const z of [-59, -43.5, -20]) silo(-482, z, sowInfo('Silo cám trại nái', 'Xe cám bơm từ đường phía tây.', ['15–20 tấn']));
+{ const g = new THREE.Group(); addBox(g, 6, 0.25, 3.2, -322, 0.13, 45, M.concrete); addBox(g, 6, 1.1, 0.12, -322, 0.85, 43.6, M.steel); addBox(g, 6, 1.1, 0.12, -322, 0.85, 46.4, M.steel);
+  g.userData.info = sowInfo('Cầu xuất heo cai sữa', 'Mỗi tuần 1 dãy cai sữa (~280–300 con) lên xe nội bộ sạch.', ['Xe chỉ chạy đường chuyển heo nội bộ, không ra đường công cộng']); world.add(g); pick.push(g); }
 /* Gilt quarantine */
-{
-  const T = building({ cx: -577, cz: 0, len: 40, wid: 12, roof: M.roofRed, info: { zone: 'Cải tiến #5', title: 'Chuồng cách ly hậu bị nhập', headline: 'Hậu bị mới được cách ly 4–6 tuần ngoài hàng rào trại nái.',
-    lines: ['8 ô × 2 hàng × 6 con ≈ 96 chỗ', 'Nhân sự và dụng cụ riêng', 'Xét nghiệm và thích nghi trước khi nhập đàn'] } });
-  for (const sgn of [-1, 1]) { const rz = sgn * 3.375;
-    for (let i = 0; i <= 8; i++) { const [x, z] = T(-18 + i * 4.5, rz); B.rails.add(x, 0.8, z, 0.06, 1, 5.25); }
-    for (let i = 0; i < 8; i++) for (let k = 0; k < 6; k++) { const [x, z] = T(-15.75 + i * 4.5 + (rng() - 0.5) * 3, rz + (rng() - 0.5) * 3.6); B.pigs.add(x, 0.65, z, 0.45, 0.66, 1.4, rng() * 6.28, pigC()); } }
-}
-/* Water */
-{
-  const g = new THREE.Group();
-  const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), std('#c2b48f')); shore.scale.set(38, 21, 1); shore.rotation.x = -Math.PI / 2; shore.position.set(-410, 0.22, 118); g.add(shore);
-  const p = new THREE.Mesh(new THREE.CircleGeometry(1, 48), M.water); p.scale.set(35, 18, 1); p.rotation.x = -Math.PI / 2; p.position.set(-410, 0.3, 118); g.add(p);
-  const tank = new THREE.Mesh(cylGeo, std('#e6e9ec', { metalness: 0.3, roughness: 0.4 })); tank.scale.set(4, 5, 4); tank.position.set(-345, 17, 142); tank.castShadow = true; g.add(tank);
-  for (const [lx, lz] of [[2.5, 2.5], [-2.5, 2.5], [2.5, -2.5], [-2.5, -2.5]]) addBox(g, 0.3, 14.5, 0.3, -345 + lx, 7.25, 142 + lz, M.steel);
-  g.userData.info = { zone: 'Cải tiến #8', title: 'Hồ chứa & tháp nước', headline: 'Dự trữ cho vài ngày vận hành, cấp áp lực cho toàn trại.', lines: ['Nhu cầu ước tính 600–900 m³/ngày', 'Nước được xử lý trước khi cấp cho chuồng'] };
-  world.add(g); pick.push(g);
-}
-building({ cx: -350, cz: 112, len: 14, wid: 10, h: 4, roof: M.roofLog, vent: false, openable: false, info: { zone: 'Cải tiến #8', title: 'Giếng khoan & nhà xử lý nước', headline: 'Nước sạch là đầu vào an toàn sinh học.', lines: ['Lọc, khử trùng, kiểm tra định kỳ', 'Bộ châm Dosatron đặt ở bể đầu mỗi dãy chuồng'] } });
+{ const T = building({ cx: -577, cz: 0, len: 40, wid: 12, roof: M.roofRed, info: { zone: 'Điểm chính #5', title: 'Chuồng cách ly hậu bị nhập', headline: 'Đây là nguồn rủi ro duy nhất từ bên ngoài đi vào đàn: cách ly 4–6 tuần.', lines: ['≈ 96 chỗ, nhân sự và dụng cụ riêng', 'Thay đàn khoảng 40–50%/năm, tức ~250–300 hậu bị (ước tính), nhập theo đợt'] } });
+  for (const sgn of [-1, 1]) { const rz = sgn * 3.375; for (let i = 0; i <= 8; i++) { const [x, z] = T(-18 + i * 4.5, rz); B.rails.add(x, 0.8, z, 0.06, 1, 5.25); }
+    for (let i = 0; i < 8; i++) for (let k = 0; k < 6; k++) { const [x, z] = T(-15.75 + i * 4.5 + (rng() - 0.5) * 3, rz + (rng() - 0.5) * 3.6); B.pigs.add(x, 0.65, z, 0.45, 0.66, 1.4, rng() * 6.28, pigC()); } } }
+
+/* Water (north, upwind) */
+{ const g = new THREE.Group();
+  const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), std('#c2b48f')); shore.scale.set(33, 17, 1); shore.rotation.x = -Math.PI / 2; shore.position.set(-420, 0.22, -127); g.add(shore);
+  const p = new THREE.Mesh(new THREE.CircleGeometry(1, 48), M.water); p.scale.set(30, 14, 1); p.rotation.x = -Math.PI / 2; p.position.set(-420, 0.3, -127); g.add(p);
+  const tank = new THREE.Mesh(cylGeo, std('#e6e9ec', { metalness: 0.3, roughness: 0.4 })); tank.scale.set(3.2, 4, 3.2); tank.position.set(-365, 15, -114); tank.castShadow = true; g.add(tank);
+  for (const [lx, lz] of [[2, 2], [-2, 2], [2, -2], [-2, -2]]) addBox(g, 0.3, 13, 0.3, -365 + lx, 6.5, -114 + lz, M.steel);
+  g.userData.info = { zone: 'Điểm chính #7', title: 'Hồ chứa & tháp nước', headline: 'Nhu cầu ước tính 100–150 m³/ngày.', lines: ['Dự trữ cho vài ngày vận hành', 'Đồng hồ nước theo từng dãy'] }; world.add(g); pick.push(g); }
+building({ cx: -365, cz: -134, len: 12, wid: 8, h: 4, roof: M.roofLog, vent: false, openable: false, info: { zone: 'Điểm chính #7', title: 'Giếng khoan & nhà xử lý nước', headline: 'Lọc, khử trùng trước khi cấp cho chuồng.', lines: ['Dosatron đặt ở bể đầu mỗi dãy'] } });
 
 /* ===================== LOGISTICS ===================== */
 const logInfo = (title, headline, lines) => ({ zone: Z.log, title, headline, lines });
-building({ cx: -240, cz: -30, len: 50, wid: 25, h: 8, roof: M.roofLog, vent: false, openable: false, info: logInfo('Kho cám tổng', 'Trung chuyển cám ra 3 tuyến xe cám riêng.', ['Ước tính trại tiêu thụ 35–40 nghìn tấn cám/năm', 'Khoảng 5–7 chuyến xe bồn/ngày']) });
-building({ cx: -240, cz: 22, len: 40, wid: 12, h: 3.5, roof: M.roofLog, vent: false, openable: false, info: logInfo('Khu nghỉ cách ly 48 giờ', 'Nhân sự ở đây 48 giờ rồi đi theo tuyến riêng đến nhà tắm của đúng khu mình.', ['Phòng ở, nhà ăn, giặt sấy', 'Tách tuyến cho nhân sự cụm nái và từng khu thịt']) });
-{
-  const g = new THREE.Group(); const cols = ['#4aa3df', '#3cbfae', '#7bc96f'];
-  [125, 108, 91].forEach((z, i) => {
-    addBox(g, 0.4, 5, 14, -283.2, 2.5, z, M.wall); addBox(g, 0.4, 5, 14, -276.8, 2.5, z, M.wall); addBox(g, 7.2, 0.35, 14, -280, 5.15, z, M.roofLog);
-    const mist = new THREE.Mesh(geoBox, new THREE.MeshStandardMaterial({ color: cols[i], transparent: true, opacity: 0.28, depthWrite: false })); mist.scale.set(6, 4.6, 13.6); mist.position.set(-280, 2.4, z); g.add(mist);
-  });
-  g.userData.info = logInfo('Nhà sát trùng xe tự động 3 cấp', 'Mọi xe vào trại đi qua 3 cổng phun liên tiếp.', ['Cấp 1 rửa bùn, cấp 2 phun sát trùng, cấp 3 sấy/ủ']); world.add(g); pick.push(g);
-}
-{
-  const g = new THREE.Group();
-  addBox(g, 4, 0.35, 18, -280, 0.2, 150, M.steel); addBox(g, 3, 3, 3, -272, 1.5, 150, M.wall); addBox(g, 3.6, 0.3, 3.6, -272, 3.15, 150, M.roofLog);
-  addBox(g, 0.5, 2.5, 0.5, -285, 1.25, 168, M.steel); addBox(g, 0.5, 2.5, 0.5, -275, 1.25, 168, M.steel); addBox(g, 10, 0.25, 0.25, -280, 2.3, 168, std('#d64541'));
-  g.userData.info = logInfo('Cổng chính & trạm cân điện tử', 'Cân xe cám, xe heo, xe nhân sự.', ['Bàn cân 18 m, camera biển số']); world.add(g); pick.push(g);
-}
-building({ cx: -235, cz: 146, len: 20, wid: 12, h: 3.5, roof: M.roofRed, vent: false, openable: false, info: { zone: 'Cải tiến #2', title: 'Trạm trung chuyển heo con', headline: 'Xe heo của trại vệ tinh dừng ở phía ngoài; heo đi qua cầu chuyển sang xe nội bộ sạch.',
-  lines: ['Phía nam (bẩn) là xe ngoài, phía bắc (sạch) là xe nội bộ', 'Ô tạm giữ, lấy mẫu xét nghiệm trước khi chuyển', 'Xe nội bộ chỉ chạy hành lang sạch đến cầu nhập của từng khu', 'Sát trùng cầu chuyển sau mỗi lượt'] } });
+building({ cx: -395, cz: 150, len: 30, wid: 10, h: 3.5, roof: M.roofLog, vent: false, openable: false, info: logInfo('Khu cách ly 48 giờ', 'Nhân sự ở 48 giờ rồi đi theo tuyến riêng đến trại nái hoặc khu thịt.', ['Khoảng 25–30 nhân sự cho quy mô này (ước tính)']) });
+building({ cx: -395, cz: 115, len: 30, wid: 14, h: 5, roof: M.roofLog, vent: false, openable: false, info: logInfo('Kho vật tư & thuốc thú y', 'Vật tư được sát trùng/UV trước khi vào trại.', ['Cám giao thẳng vào silo, không cần kho cám lớn']) });
+{ const g = new THREE.Group(); const cols = ['#4aa3df', '#3cbfae', '#7bc96f'];
+  [140, 123, 106].forEach((z, i) => { addBox(g, 0.4, 5, 14, -443.2, 2.5, z, M.wall); addBox(g, 0.4, 5, 14, -436.8, 2.5, z, M.wall); addBox(g, 7.2, 0.35, 14, -440, 5.15, z, M.roofLog);
+    const mist = new THREE.Mesh(geoBox, new THREE.MeshStandardMaterial({ color: cols[i], transparent: true, opacity: 0.28, depthWrite: false })); mist.scale.set(6, 4.6, 13.6); mist.position.set(-440, 2.4, z); g.add(mist); });
+  g.userData.info = logInfo('Nhà sát trùng xe 3 cấp', 'Xe cám và xe nhân sự đều phải qua.', ['Rửa → phun sát trùng → sấy/ủ']); world.add(g); pick.push(g); }
+{ const g = new THREE.Group(); addBox(g, 4, 0.35, 16, -440, 0.2, 162, M.steel); addBox(g, 3, 3, 3, -432, 1.5, 162, M.wall); addBox(g, 3.6, 0.3, 3.6, -432, 3.15, 162, M.roofLog);
+  addBox(g, 0.5, 2.5, 0.5, -445, 1.25, 173, M.steel); addBox(g, 0.5, 2.5, 0.5, -435, 1.25, 173, M.steel); addBox(g, 10, 0.25, 0.25, -440, 2.3, 173, std('#d64541'));
+  g.userData.info = logInfo('Cổng chính & trạm cân', 'Xe công cộng dừng ở đây.', ['Bàn cân, camera biển số']); world.add(g); pick.push(g); }
 
-/* ===================== FINISHER PODS ===================== */
-for (const P of PODS) {
-  const fInfo = { zone: Z.fin, title: `Khu thịt ${P.id} · ${P.name} · 15.000 con`, headline: `AIAO theo cả khu, 1 nguồn heo, đồng phục màu ${P.colorName}.`,
-    lines: ['12 dãy × 1.250 con, hàng rào riêng', 'Diện tích ≈ 3,9 ha', '6 silo, 1 máy phát dự phòng, 1 nhà tắm xuyên hàng rào', 'Cầu nhập ở hành lang sạch, cầu xuất ở hàng rào ngoài',
-      'Lệch pha khoảng 6 tuần giữa các khu (ước tính, chu kỳ 22–24 tuần)'] };
-  pad(P.x0, P.z0, P.x1, P.z1, M.pad, fInfo);
-  fence(P.x0, P.z0, P.x1, P.z1);
-  for (const c of P.cols) {
-    P.rows.forEach((cz, r) => {
-      const rowNo = P.sz < 0 ? r + 1 : r + 7;
-      const T = building({ cx: colX[c], cz, len: 110, wid: 15, roof: M.roofFin, padSide: padSideC[c],
-        info: { zone: `Khu thịt ${P.id}`, title: `Dãy ${P.id}-${colName[c]}${String(rowNo).padStart(2, '0')}`, headline: '1.250 con/dãy, Cùng vào – Cùng ra theo cả khu.',
-          lines: ['50 ô × 25 con, ≈ 1,19 m²/con', 'Nền bê tông đặc kết hợp tấm đan', 'Cooling pad và quạt hút biến tần', 'Dosatron tại bể đầu dãy, có đồng hồ nước riêng'] } });
-      finisherInterior(T, 0);
-    });
-    const pairs = P.sz < 0 ? [-144.5, -98.5, -52.5] : [52.5, 98.5, 144.5];
-    pairs.forEach((zm, k) => {
-      const xs = colX[c] + padSideC[c] * 61;
-      silo(xs, zm, { zone: `Khu thịt ${P.id}`, title: `Silo cám ${colName[c]}${k + 1} · cấp cho 2 dãy`, headline: '18 tấn, đủ khoảng 3 ngày cho 2.500 heo vỗ béo (ước tính).', lines: ['Xe cám đứng ngoài hàng rào, bơm vào silo'] });
-      for (const s of [-1, 1]) { const zb = zm + s * 11.5, xg = colX[c] + padSideC[c] * 55; pipe([xs, 3.0, zm], [xg, 3.0, zb - s * 6.5], 0.12); }
-    });
-  }
-  /* shower across fence */
-  building({ cx: P.showerX, cz: P.sz * 22, len: 12, wid: 8, h: 3.2, roof: M.roofRed, vent: false, openable: false,
-    info: { zone: 'Cải tiến #4', title: `Nhà tắm khu ${P.id} (xuyên hàng rào)`, headline: `Đi một chiều từ bẩn sang sạch; đồng phục khu ${P.id} màu ${P.colorName}.`, lines: ['Ngoài hàng rào: tủ đồ thường phục', 'Trong hàng rào: tủ đồng phục và ủng', 'Nhân sự không đi chéo giữa các khu'] } });
-  /* backup genset + beacon */
-  building({ cx: P.genX, cz: P.sz * 25.5, len: 8, wid: 5, h: 2.6, roof: M.roofWaste, vent: false, openable: false,
-    info: { zone: 'Cải tiến #7', title: `Máy phát dự phòng & báo động · Khu ${P.id}`, headline: 'Chuồng kín mất điện 30–60 phút có thể gây chết heo hàng loạt.', lines: ['Máy phát diesel tự khởi động (ATS)', 'Cảnh báo nhiệt độ và mất điện về điện thoại quản lý', 'Biogas chạy nền, diesel dự phòng'] } });
-  P.beacon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 10, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true })); P.beacon.position.set(P.genX, 4.5, P.sz * 25.5); world.add(P.beacon);
-  /* entry ramp (clean corridor) */
-  { const g = new THREE.Group(); addBox(g, 3.2, 0.25, 6, P.rampX, 0.13, P.sz * 19, M.concrete); addBox(g, 0.12, 1.2, 6, P.rampX - 1.6, 1.4, P.sz * 19, M.steel); addBox(g, 0.12, 1.2, 6, P.rampX + 1.6, 1.4, P.sz * 19, M.steel);
-    g.userData.info = { zone: 'Cải tiến #3', title: `Cầu nhập heo · Khu ${P.id}`, headline: 'Heo con vào từ hành lang sạch, xe nội bộ sạch.', lines: ['Nhận heo từ trạm trung chuyển', 'Nhập đầy cả khu trong 1–2 tuần'] }; world.add(g); pick.push(g); }
-  /* exit chute + ramp (dirty perimeter) */
-  { const g = new THREE.Group(); const zf = P.sz * 170, zd = P.sz * 163.5;
-    addBox(g, 0.12, 1.1, 6.5, P.rampX - 1.0, 0.85, (zf + zd) / 2, M.steel); addBox(g, 0.12, 1.1, 6.5, P.rampX + 1.0, 0.85, (zf + zd) / 2, M.steel);
-    addBox(g, 3.2, 0.25, 9, P.rampX, 0.13, P.sz * 174.5, M.concrete);
-    g.userData.info = { zone: 'Cải tiến #3', title: `Cầu xuất heo · Khu ${P.id}`, headline: 'Xe lái buôn chỉ đứng ở đường bẩn bên ngoài, không bao giờ vào trong.', lines: ['Heo đi một chiều ra ngoài, không quay lại', 'Sát trùng cầu xuất ngay sau mỗi lượt'] }; world.add(g); pick.push(g); }
-  /* carcass bins */
-  { const g = new THREE.Group(); for (let i = 0; i < 3; i++) addBox(g, 1.6, 1.3, 1.2, P.binX + i * 2.2, 0.75, P.sz * 174, M.bin);
-    g.userData.info = { zone: 'Cải tiến #6', title: `Thùng chứa xác · Khu ${P.id}`, headline: 'Đặt ở hàng rào ngoài, xe kéo tuyến bẩn đến thu gom.', lines: ['Công nhân trong khu đẩy xác ra qua cửa một chiều'] }; world.add(g); pick.push(g); }
-}
+/* ===================== FINISHER (6.000) ===================== */
+const FIN = '#3f8f4f', finRows = [-45, -20, 5, 30];
+finRows.forEach((cz, b) => {
+  const T = building({ cx: -129, cz, len: 122, wid: 15, roof: M.roofFin, padSide: -1,
+    info: { zone: Z.fin, title: `Dãy thịt ${b + 1}/4 · 5 phòng × 300 con`, headline: `Phòng ${b * 5 + 1}–${b * 5 + 5} trong vòng 20 phòng: mỗi phòng là 1 lứa tuần, Cùng vào – Cùng ra theo phòng.`,
+      lines: ['Phòng 24 m: 10 ô × 30 con, ≈ 1,1 m²/con', 'Mở mái để thấy heo lớn dần theo phòng (10 → ~26 tuần tuổi)', b === 3 ? 'Phòng cuối đang trống để vệ sinh, sát trùng, phơi chuồng' : 'Cooling pad đầu tây, quạt hút đầu đông', 'Dosatron và đồng hồ nước tại bể đầu dãy'] } });
+  finisherRooms(T, 0, b);
+  const zs = cz - 12.5;
+  silo(-196, zs, { zone: Z.fin, title: `Silo cám dãy ${b + 1}`, headline: '18 tấn, đủ khoảng 7–10 ngày cho 1.500 heo (ước tính).', lines: ['Trại dùng ≈ 4.300–4.800 tấn cám/năm (ước tính), khoảng 1 xe bồn/ngày'] });
+  pipe([-196, 3, zs], [-190, 3, cz - 6], 0.12);
+});
+building({ cx: -90, cz: 55, len: 12, wid: 8, h: 3.2, roof: M.roofRed, vent: false, openable: false, info: { zone: 'Điểm chính #6', title: 'Nhà tắm khu thịt (xuyên hàng rào)', headline: 'Đồng phục xanh lá; nhân sự khu thịt không sang trại nái.', lines: ['Đi một chiều từ bẩn sang sạch'] } });
+building({ cx: -60, cz: 46, len: 6, wid: 4, h: 2.4, roof: M.roofWaste, vent: false, openable: false, info: { zone: 'Điểm chính #7', title: 'Máy phát dự phòng & báo động', headline: 'Chuồng kín mất điện 30–60 phút có thể gây chết heo hàng loạt.', lines: ['Máy phát diesel tự khởi động (ATS)', 'Báo động nhiệt độ và mất điện về điện thoại'] } });
+const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.45, 10, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30', transparent: true })); beacon.position.set(-60, 3.6, 46); world.add(beacon);
+building({ cx: -440, cz: -60, len: 6, wid: 4, h: 2.4, roof: M.roofWaste, vent: false, openable: false, info: { zone: 'Điểm chính #7', title: 'Máy phát dự phòng · trại nái', headline: 'Tự khởi động khi mất điện.', lines: ['Ưu tiên phòng đẻ và cai sữa'] } });
+{ const g = new THREE.Group(); addBox(g, 7, 0.25, 3.2, -208.5, 0.13, 45, M.concrete); addBox(g, 7, 1.1, 0.12, -208.5, 0.85, 43.6, M.steel); addBox(g, 7, 1.1, 0.12, -208.5, 0.85, 46.4, M.steel);
+  g.userData.info = { zone: 'Điểm chính #3', title: 'Cầu nhập heo khu thịt (phía sạch)', headline: 'Nhận nguyên 1 lứa tuần từ trại nái, đưa vào đúng phòng vừa vệ sinh.', lines: ['Đường chuyển heo nội bộ chỉ dùng cho xe nội bộ sạch'] }; world.add(g); pick.push(g); }
+{ const g = new THREE.Group(); addBox(g, 0.12, 1.1, 18, -111.2, 0.85, -61.5, M.steel); addBox(g, 0.12, 1.1, 18, -108.8, 0.85, -61.5, M.steel); addBox(g, 3.2, 0.25, 8, -110, 0.13, -74, M.concrete);
+  g.userData.info = { zone: 'Điểm chính #4', title: 'Cầu xuất heo (phía bẩn)', headline: 'Xe lái buôn chỉ đứng ở đường bẩn phía bắc, không bao giờ vào trong.', lines: ['Mỗi tuần xuất 1 phòng ≈ 270–290 con', 'Sát trùng cầu xuất ngay sau mỗi lượt'] }; world.add(g); pick.push(g); }
+{ const g = new THREE.Group(); for (let i = 0; i < 2; i++) addBox(g, 1.6, 1.3, 1.2, -150 + i * 2.2, 0.75, -74, M.bin);
+  g.userData.info = { zone: 'Điểm chính #8', title: 'Thùng chứa xác', headline: 'Ở hàng rào ngoài, xe kéo tuyến bẩn thu gom về lò đốt.', lines: [] }; world.add(g); pick.push(g); }
 
 /* ===================== WASTE ===================== */
 const wInfo = (title, headline, lines) => ({ zone: Z.waste, title, headline, lines });
-building({ cx: 450, cz: -90, len: 26, wid: 12, h: 6, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Trạm tách ép phân · 2 line', 'Gấp đôi công suất so với v1, có line dự phòng khi bảo trì.', ['Giảm 60–70% hữu cơ trước khi vào biogas']) });
-building({ cx: 485, cz: -90, len: 28, wid: 12, h: 5, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Nhà ủ & đóng bao phân vi sinh', 'Bã phân khô trở thành sản phẩm.', ['Ủ vi sinh, đóng bao']) });
-function lagoon(cx, cz, i, reserve) {
-  const g = new THREE.Group(), lx = 70, lz = 30;
+building({ cx: 5, cz: -55, len: 18, wid: 10, h: 5, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Trạm tách ép phân', 'Giảm 60–70% hữu cơ trước khi vào biogas.', ['Nhận chất thải từ cả trại nái và khu thịt']) });
+building({ cx: 32, cz: -55, len: 18, wid: 10, h: 4.5, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Nhà ủ & đóng bao phân vi sinh', 'Bã phân khô trở thành sản phẩm.', []) });
+{ const g = new THREE.Group(), cx = 57, cz = -15, lx = 55, lz = 24;
   addBox(g, lx + 6, 1.5, 3, cx, 0.75, cz - lz / 2 - 1.5, M.berm); addBox(g, lx + 6, 1.5, 3, cx, 0.75, cz + lz / 2 + 1.5, M.berm);
   addBox(g, 3, 1.5, lz, cx - lx / 2 - 1.5, 0.75, cz, M.berm); addBox(g, 3, 1.5, lz, cx + lx / 2 + 1.5, 0.75, cz, M.berm);
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 16, 0, Math.PI * 2, 0, Math.PI / 2), reserve ? M.domeReserve : M.dome);
-  dome.scale.set(lx / 2, reserve ? 2 : 4.2, lz / 2); dome.position.set(cx, 0.6, cz); dome.castShadow = !reserve; g.add(dome);
-  g.userData.info = reserve ? { zone: 'Cải tiến #9', title: 'Hầm biogas số 3 · dự phòng giai đoạn 2', headline: 'Quy hoạch sẵn mặt bằng nếu nước thải thực tế vượt 300 m³/ngày.', lines: ['+9.450 m³, nâng tổng lên ≈ 28.000 m³', 'Kích hoạt khi đo đạc thực tế 3–6 tháng đầu'] }
-    : wInfo(`Hầm biogas HDPE · Hầm ${i}`, 'Hầm kín thu khí để phát điện.', ['70 × 30 × 4,5 m ≈ 9.450 m³']);
-  world.add(g); pick.push(g);
-}
-lagoon(525, -50, 1); lagoon(525, -10, 2); lagoon(525, 30, 3, true);
-building({ cx: 450, cz: -20, len: 16, wid: 10, h: 4.5, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Nhà máy phát điện biogas', 'Cấp 70–80% điện năng cho quạt làm mát.', ['Chạy nền, diesel từng khu dự phòng']) });
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 16, 0, Math.PI * 2, 0, Math.PI / 2), M.dome); dome.scale.set(lx / 2, 3.6, lz / 2); dome.position.set(cx, 0.6, cz); dome.castShadow = true; g.add(dome);
+  g.userData.info = wInfo('Hầm biogas HDPE', '55 × 24 × 4,5 m ≈ 5.900 m³.', ['Thời gian lưu ≈ 40–65 ngày ở 90–150 m³/ngày (ước tính)']); world.add(g); pick.push(g); }
+building({ cx: 5, cz: -18, len: 12, wid: 8, h: 4, roof: M.roofWaste, vent: false, openable: false, info: wInfo('Máy phát điện biogas', 'Chạy nền cho quạt làm mát.', ['Diesel dự phòng đặt ở từng cụm']) });
 let flame;
-{ const g = new THREE.Group();
-  const s = new THREE.Mesh(cylGeo, M.steel); s.scale.set(2, 8, 2); s.position.set(445, 4, -3); s.castShadow = true; g.add(s);
-  const f = new THREE.Mesh(cylGeo, M.steel); f.scale.set(0.25, 11, 0.25); f.position.set(457, 5.5, -1); g.add(f);
-  flame = new THREE.Mesh(new THREE.ConeGeometry(0.6, 1.8, 10), new THREE.MeshBasicMaterial({ color: '#ff8a2a' })); flame.position.set(457, 11.9, -1); g.add(flame);
-  g.userData.info = wInfo('Tháp lọc H₂S & đuốc đốt khí dư', 'Lọc H₂S trước khi vào máy phát.', ['Đuốc đốt an toàn cho gas dư']); world.add(g); pick.push(g); }
-{ const g = new THREE.Group();
-  const wall = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 3, 40, 1, true), std('#bdbab2', { side: THREE.DoubleSide })); wall.position.set(452, 1.5, 75); g.add(wall);
-  const w = new THREE.Mesh(new THREE.CircleGeometry(8.9, 40), M.water); w.rotation.x = -Math.PI / 2; w.position.set(452, 2.5, 75); g.add(w);
-  g.userData.info = wInfo('Bể lắng', 'Lắng cặn sau biogas.', ['Bùn quay về trạm tách ép']); world.add(g); pick.push(g); }
+{ const g = new THREE.Group(); const s = new THREE.Mesh(cylGeo, M.steel); s.scale.set(1.5, 6, 1.5); s.position.set(5, 3, -3); s.castShadow = true; g.add(s);
+  const f = new THREE.Mesh(cylGeo, M.steel); f.scale.set(0.22, 9, 0.22); f.position.set(15, 4.5, -2); g.add(f);
+  flame = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1.5, 10), new THREE.MeshBasicMaterial({ color: '#ff8a2a' })); flame.position.set(15, 9.7, -2); g.add(flame);
+  g.userData.info = wInfo('Lọc H₂S & đuốc đốt khí dư', '', ['Bảo vệ máy phát, giảm mùi']); world.add(g); pick.push(g); }
+{ const g = new THREE.Group(); const wall = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 3, 36, 1, true), std('#bdbab2', { side: THREE.DoubleSide })); wall.position.set(5, 1.5, 30); g.add(wall);
+  const w = new THREE.Mesh(new THREE.CircleGeometry(5.9, 36), M.water); w.rotation.x = -Math.PI / 2; w.position.set(5, 2.5, 30); g.add(w);
+  g.userData.info = wInfo('Bể lắng', '', ['Bùn quay về trạm tách ép']); world.add(g); pick.push(g); }
 const bubbles = [];
-{ const g = new THREE.Group();
-  addBox(g, 34, 3, 0.4, 500, 1.5, 68, M.concrete); addBox(g, 34, 3, 0.4, 500, 1.5, 82, M.concrete); addBox(g, 0.4, 3, 14, 483, 1.5, 75, M.concrete); addBox(g, 0.4, 3, 14, 517, 1.5, 75, M.concrete);
-  addBox(g, 33.6, 0.1, 13.6, 500, 2.5, 75, M.water, false);
-  const bm = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.8 });
-  for (let i = 0; i < 6; i++) for (let j = 0; j < 2; j++) { const b = new THREE.Mesh(new THREE.CircleGeometry(1.4, 16), bm); b.rotation.x = -Math.PI / 2; b.position.set(487 + i * 5.2, 2.58, 71 + j * 8); g.add(b); bubbles.push(b); }
-  g.userData.info = wInfo('Aerotank (có đất dự phòng mở rộng)', 'Xử lý hiếu khí.', ['Quy hoạch sẵn mặt bằng cho bể thứ 2']); world.add(g); pick.push(g); }
-{ const g = new THREE.Group();
-  const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), std('#c2b48f')); shore.scale.set(33, 23, 1); shore.rotation.x = -Math.PI / 2; shore.position.set(560, 0.22, 100); g.add(shore);
-  const p = new THREE.Mesh(new THREE.CircleGeometry(1, 48), M.water); p.scale.set(30, 20, 1); p.rotation.x = -Math.PI / 2; p.position.set(560, 0.3, 100); g.add(p);
-  g.userData.info = wInfo('Hồ sinh học', 'Bậc cuối trước khi xả hoặc tái sử dụng.', ['QCVN 62-MT:2016/BTNMT']); world.add(g); pick.push(g); }
-/* incinerator */
-building({ cx: 580, cz: -146, len: 16, wid: 10, h: 4, roof: M.roofRed, vent: false, openable: false, info: { zone: 'Cải tiến #6', title: 'Lò đốt xác heo', headline: 'Cuối hướng gió, nằm hoàn toàn trên tuyến bẩn.', lines: ['Xe kéo thu gom từ thùng chứa ở hàng rào ngoài các khu', 'Không giao cắt với tuyến sạch'] } });
-const chim = new THREE.Mesh(cylGeo, M.dark); chim.scale.set(0.6, 12, 0.6); chim.position.set(586, 6, -146); chim.castShadow = true; world.add(chim);
-/* manure pipes */
-for (const [a, b] of [[[-330, -85], [-330, -195]], [[-330, -195], [450, -195]], [[450, -195], [450, -96]], [[117, 175], [117, -195]]]) pipe([a[0], 0.6, a[1]], [b[0], 0.6, b[1]], 0.45, M.pipe);
+{ const g = new THREE.Group(); addBox(g, 22, 3, 0.4, 40, 1.5, 25, M.concrete); addBox(g, 22, 3, 0.4, 40, 1.5, 35, M.concrete); addBox(g, 0.4, 3, 10, 29, 1.5, 30, M.concrete); addBox(g, 0.4, 3, 10, 51, 1.5, 30, M.concrete);
+  addBox(g, 21.6, 0.1, 9.6, 40, 2.5, 30, M.water, false); const bm = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.8 });
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 2; j++) { const b = new THREE.Mesh(new THREE.CircleGeometry(1.1, 16), bm); b.rotation.x = -Math.PI / 2; b.position.set(32 + i * 5.3, 2.58, 27.5 + j * 5); g.add(b); bubbles.push(b); }
+  g.userData.info = wInfo('Aerotank', 'Xử lý hiếu khí.', []); world.add(g); pick.push(g); }
+{ const g = new THREE.Group(); const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), std('#c2b48f')); shore.scale.set(21, 16, 1); shore.rotation.x = -Math.PI / 2; shore.position.set(85, 0.22, 35); g.add(shore);
+  const p = new THREE.Mesh(new THREE.CircleGeometry(1, 48), M.water); p.scale.set(18, 13, 1); p.rotation.x = -Math.PI / 2; p.position.set(85, 0.3, 35); g.add(p);
+  g.userData.info = wInfo('Hồ sinh học', 'Bậc cuối trước khi xả hoặc tái sử dụng tưới cây.', ['QCVN 62-MT:2016/BTNMT']); world.add(g); pick.push(g); }
+building({ cx: 85, cz: -94, len: 10, wid: 7, h: 3.5, roof: M.roofRed, vent: false, openable: false, info: { zone: 'Điểm chính #8', title: 'Lò đốt xác', headline: 'Cuối hướng gió, nằm trên tuyến bẩn.', lines: ['Xác heo không quay lại vùng sạch'] } });
+const chim = new THREE.Mesh(cylGeo, M.dark); chim.scale.set(0.5, 10, 0.5); chim.position.set(89, 5, -94); chim.castShadow = true; world.add(chim);
+for (const [a, b] of [[[-330, -85], [-330, -100]], [[-330, -100], [-30, -100]], [[-30, -100], [-30, -62]], [[-50, -62], [-4, -62]]]) pipe([a[0], 0.6, a[1]], [b[0], 0.6, b[1]], 0.4, M.pipe);
 
 /* ===================== ZONING ===================== */
-zone(-495, -85, -325, 65, CLEAN); zone(-460, 88, -328, 160, CLEAN);
-for (const P of PODS) zone(P.x0, P.z0, P.x1, P.z1, CLEAN);
-zone(-310, -60, -190, 160, BUF); zone(-610, -25, -545, 25, BUF);
-zone(-172, -22, 406, 22, BUF); zone(106, -170, 128, -22, BUF); zone(106, 22, 128, 170, BUF); zone(-172, -170, -158, 170, BUF); zone(392, -170, 406, 170, BUF);
-zone(-640, 179, 650, 191, DIRTY); zone(-172, -185, 645, -171, DIRTY); zone(634, -185, 646, 191, DIRTY); zone(420, -110, 600, 130, DIRTY); zone(556, -168, 604, -126, DIRTY);
-for (const P of PODS) zone(P.rampX - 3, P.sz > 0 ? 170 : -179, P.rampX + 3, P.sz > 0 ? 179 : -170, DIRTY);
+zone(-495, -85, -325, 65, CLEAN); zone(-470, -150, -350, -105, CLEAN); zone(-205, -70, -50, 55, CLEAN);
+zone(-470, 85, -350, 172, BUF); zone(-610, -25, -545, 25, BUF); zone(-508, 73, -216, 79, BUF); zone(-325, 42, -205, 48, BUF); zone(-224, -62, -216, 79, BUF);
+zone(-650, 174, 170, 186, DIRTY); zone(144, -84, 156, 186, DIRTY); zone(-160, -85, 150, -75, DIRTY); zone(-20, -70, 110, 60, DIRTY); zone(68, -104, 102, -84, DIRTY); zone(-113, -78, -107, -70, DIRTY);
 
 /* ===================== TREES ===================== */
 const trunkB = new Batch(new THREE.CylinderGeometry(0.25, 0.35, 3, 6), M.trunk, world, { cast: true });
 const crownB = new Batch(new THREE.IcosahedronGeometry(2.8, 0), M.crown, world, { cast: true });
 function tree(x, z, s = 1) { const h = (0.8 + rng() * 0.5) * s; trunkB.add(x, 1.5 * h, z, h, h, h); crownB.add(x, 5.2 * h, z, h, h * (1 + rng() * 0.4), h, rng() * 6, new THREE.Color().setHSL(0.24 + rng() * 0.06, 0.38, 0.32 + rng() * 0.1)); }
 function belt(x0, z0, x1, z1, step, skip = () => false) { const n = Math.max(1, Math.round(Math.hypot(x1 - x0, z1 - z0) / step)); for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * i / n + (rng() - 0.5) * 2, z = z0 + (z1 - z0) * i / n + (rng() - 0.5) * 2; if (!skip(x, z)) tree(x, z); } }
-for (const off of [0, 7]) {   // double belt around sow site
-  belt(-500 - off, -92 - off, -320 + off, -92 - off, 6.5); belt(-317 + off, -85, -317 + off, 65, 6.5, (x, z) => Math.abs(z + 40) < 6);
-  belt(-512 - off, -85, -512 - off, 65, 6.5, (x, z) => Math.abs(z) < 6);
-}
-belt(-186, -60, -186, 160, 7, (x, z) => Math.abs(z) < 7);
-for (const zz of [-12, 12]) belt(-150, zz, 400, zz, 8, x => [60, 300, -25, 260, 117].some(v => Math.abs(x - v) < 9));
-belt(420, -118, 600, -118, 7, x => Math.abs(x - 470) < 6); belt(608, -110, 608, 130, 7); belt(420, 138, 600, 138, 7);
-belt(-330, -205, 600, -205, 9); belt(-330, -213, 600, -213, 9);
-const excl = [[-520, -112, -310, 75], [-620, -32, -538, 32], [-470, 82, -320, 166], [-315, -66, -183, 168], [-178, -190, 412, 178], [414, -124, 616, 146], [-700, 176, 760, 195], [-340, -220, 660, -170], [628, -200, 652, 200], [550, -170, 610, -120]];
-for (let i = 0; i < 1000; i++) { const x = -720 + rng() * 1480, z = -360 + rng() * 720; if (excl.some(([a, b, c, d]) => x > a && x < c && z > b && z < d)) continue; tree(x, z, 1.1); }
-for (const k in B) B[k].build(); trunkB.build(); crownB.build();
+for (const off of [0, 7]) { belt(-317 + off, -85, -317 + off, 65, 6.5, (x, z) => Math.abs(z - 45) < 6); belt(-512 - off, -85, -512 - off, 65, 6.5, (x, z) => Math.abs(z) < 6); }
+belt(-260, -70, -260, 30, 7); belt(-35, -70, -35, 60, 7, (x, z) => Math.abs(z + 62) < 4); belt(-200, -88, -60, -88, 8, x => Math.abs(x + 110) < 14);
+belt(118, -70, 118, 60, 7); belt(-20, 68, 110, 68, 7);
+const excl = [[-520, -112, -310, 70], [-620, -32, -538, 32], [-478, -158, -342, -98], [-478, 70, -342, 190], [-232, -78, -40, 82], [-28, -108, 125, 75], [-660, 170, 180, 192], [140, -90, 162, 192], [-170, -90, 160, -70], [-512, 66, -210, 82], [-330, 38, -200, 52], [-226, -70, -212, 80]];
+for (let i = 0; i < 700; i++) { const x = -720 + rng() * 940, z = -280 + rng() * 520; if (excl.some(([a, b, c, d]) => x > a && x < c && z > b && z < d)) continue; tree(x, z, 1.1); }
+washB.build(); for (const k in B) B[k].build(); trunkB.build(); crownB.build();
 
-/* ===================== PEOPLE & VEHICLES ===================== */
+/* ===== ENGINE ===== */
+const flows = [];
 function mkPath(pts) { const P = pts.map(p => ({ x: p[0], z: p[1] })); const cum = [0]; for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + Math.hypot(P[i].x - P[i - 1].x, P[i].z - P[i - 1].z)); return { P, cum, L: cum[cum.length - 1] }; }
 function sample(pa, s) { const { P, cum } = pa; let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const a = P[i - 1], b = P[i], seg = cum[i] - cum[i - 1] || 1, t = Math.min(1, Math.max(0, (s - cum[i - 1]) / seg)); return { x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t, dx: (b.x - a.x) / seg, dz: (b.z - a.z) / seg }; }
 class Mover {
@@ -614,20 +569,16 @@ function makeVehicle(type) {
 }
 function vehicle(type, pts, o = {}) { const v = makeVehicle(type); const m = new Mover(v, pts, { speed: o.speed ?? 7, dwell: o.dwell ?? 8, y: 0.12, start: o.start ?? rng() }); actors.push({ kind: 'v', m }); return m; }
 
-/* --- vehicles: clean & dirty routes never cross --- */
-vehicle('feed', [[-240, -14], [-240, 0], [-168, 0], [-168, -144]], { start: 0.1 });
-vehicle('feed', [[-240, -14], [-240, 0], [117, 0], [117, -99]], { start: 0.5 });
-vehicle('feed', [[-240, -14], [-240, 0], [402, 0], [402, 98]], { start: 0.8 });
-vehicle('feed', [[-240, -14], [-240, 0], [-168, 0], [-168, 145]], { start: 0.3 });
-vehicle('pigIn', [[-235, 132], [-200, 132], [-200, 0], [60, 0], [60, -12]], { speed: 6, dwell: 10, start: 0.2 });
-vehicle('pigIn', [[-235, 132], [-200, 132], [-200, 0], [300, 0], [300, 12]], { speed: 6, dwell: 10, start: 0.7 });
-vehicle('piglet', [[650, 185], [-235, 185], [-235, 162]], { speed: 9, dwell: 14, start: 0.4 });
-const mkt1 = vehicle('pigOut', [[640, 185], [60, 185]], { speed: 8, dwell: 30, start: 0.999 });
-const mkt2 = vehicle('pigOut', [[640, -180], [300, -180]], { speed: 8, dwell: 30, start: 0.6 });
-vehicle('tractor', [[-120, -180], [580, -180], [580, -160]], { speed: 5, dwell: 10, start: 0.3 });
-vehicle('bus', [[650, 185], [-280, 185], [-280, 40], [-255, 30]], { speed: 8, dwell: 15, start: 0.6 });
-vehicle('fork', [[-262, -14.5], [-218, -14.5]], { speed: 2.5, dwell: 3 });
-vehicle('farm', [[470, -97], [470, -80], [500, -80]], { speed: 3, dwell: 6 });
+
+/* --- vehicles (clean and dirty routes kept apart) --- */
+vehicle('feed', [[-440, 190], [-440, 76], [-220, 76], [-220, -57]], { start: 0.2, speed: 7, dwell: 10 });
+vehicle('feed', [[-440, 190], [-440, 76], [-505, 76], [-505, -55]], { start: 0.7, speed: 7, dwell: 10 });
+const xfer = vehicle('pigIn', [[-317, 45], [-214, 45]], { speed: 5, dwell: 14, start: 0.0 });
+const mkt = vehicle('pigOut', [[150, 190], [150, -80], [-110, -80]], { speed: 8, dwell: 30, start: 0.999 });
+vehicle('tractor', [[-150, -80], [85, -80], [85, -86]], { speed: 4, dwell: 10, start: 0.4 });
+vehicle('bus', [[170, 180], [-440, 180], [-440, 150], [-415, 150]], { speed: 8, dwell: 15, start: 0.5 });
+vehicle('fork', [[-412, 106], [-378, 106]], { speed: 2.2, dwell: 3 });
+vehicle('farm', [[18, -47], [18, -38], [40, -38]], { speed: 2.5, dwell: 6 });
 
 /* --- workers --- */
 const SOW = '#2f4e8c', LOG = '#e8b100', WASTE = '#e0742d', TRANSIT = '#7f93a8', VET = '#f2f2f2';
@@ -635,112 +586,90 @@ walker(SOW, [[-468, -66], [-392, -66]], { y: 0.3, dwell: 4 });
 walker(SOW, [[-392, -52], [-468, -52]], { y: 0.3, dwell: 4 });
 walker(SOW, [[-466, -38.75], [-394, -38.75]], { y: 0.3 });
 walker(SOW, [[-454, -32], [-443, -32]], { y: 0.3, speed: 0.6, dwell: 6 });
-walker(SOW, [[-417, -32], [-406, -32]], { y: 0.3, speed: 0.6, dwell: 6 });
 walker(SOW, [[-462, -10], [-410, -10]], { y: 0.3 });
 walker(SOW, [[-464, 17], [-464, 47]], { y: 1.04 });
-walker(SOW, [[-416, 47], [-416, 17]], { y: 1.04 });
+walker(SOW, [[-368, 47], [-368, 17]], { y: 1.04 });
 walker(VET, [[-345, -34], [-380, -34], [-380, 5], [-378, 10]], { cap: '#2f7d8c' });
-walker(SOW, [[-340, -60], [-340, -75], [-470, -75]], {});
+station(SOW, -328, 48.5, Math.PI, 'work');
 station('#8a6a3a', -560, 8, Math.PI, 'work');
-walker('#8a6a3a', [[-595, 0], [-559, 0]], { y: 0.3 });
-station('#2f7d8c', -338, 104, Math.PI / 2, 'work');
-/* logistics */
-station(LOG, -287, 172, Math.PI / 2, 'look', 0.12, '#17212b');
-[125, 108, 91].forEach(z => station(LOG, -274.5, z + 4, Math.PI, 'work'));
-station(LOG, -229, 139, Math.PI / 2, 'work'); station(LOG, -241, 139, Math.PI / 2, 'work');
-walker(LOG, [[-262, -18], [-218, -18]], {});
-/* transit (street clothes) between dorm and showers */
-walker(TRANSIT, [[-240, 14], [-240, 4], [-280, 4], [-280, -40], [-343, -40]], { cap: SOW });
-walker(TRANSIT, [[-240, 14], [-240, 4], [-25, 4], [-25, -16]], { cap: PODS[0].color });
-walker(TRANSIT, [[-240, 14], [-240, -4], [-30, -4], [-25, 16]], { cap: PODS[2].color });
-walker(TRANSIT, [[-240, 14], [-240, 4], [260, 4], [260, -16]], { cap: PODS[1].color });
-walker(TRANSIT, [[-240, 14], [-240, -4], [255, -4], [260, 16]], { cap: PODS[3].color });
-walker(TRANSIT, [[-246, 14], [-246, 6], [-205, 6]], { cap: LOG });
-/* pods */
-for (const P of PODS) {
-  const s = P.sz, xA = colX[P.cols[0]], xB = colX[P.cols[1]], innerRow = s < 0 ? -41 : 41, gapZ = s < 0 ? -52.5 : 52.5, gap2 = s < 0 ? -98.5 : 98.5;
-  walker(P.color, [[P.showerX, s * 27], [P.showerX, s * 30.5], [P.west ? -140 : 380, s * 30.5]], {});
-  walker(P.color, [[P.west ? -140 : 140, gapZ], [P.west ? 90 : 380, gapZ]], {});
-  walker(P.color, [[xA - 50, innerRow], [xA + 50, innerRow]], { y: 0.3, dwell: 5 });
-  walker(P.color, [[xB + 50, innerRow], [xB - 50, innerRow]], { y: 0.3, dwell: 5 });
-  walker(P.color, [[xA - 50, gap2 + s * 11.5], [xA + 50, gap2 + s * 11.5]], { y: 0.3, dwell: 5 });
-  station(P.color, colX[P.cols[0]] + padSideC[P.cols[0]] * 57, gap2, 0, 'work');
-}
-/* waste */
-station(WASTE, 450, -82, -Math.PI / 2, 'work'); station(WASTE, 485, -82, -Math.PI / 2, 'work');
-walker(WASTE, [[482, -72], [572, -72], [572, 52], [482, 52]], {});
-station('#8c2f2f', 571, -139, 0, 'work');
-/* pig loading: SW pod (x 60) & NE pod (x 300) */
+station('#2f7d8c', -357, -128, Math.PI / 2, 'work');
+station(LOG, -447, 176, Math.PI / 2, 'look', 0.12, '#17212b');
+[140, 106].forEach(z => station(LOG, -434.5, z + 4, Math.PI, 'work'));
+walker(LOG, [[-410, 100], [-380, 100]], {});
+walker(TRANSIT, [[-395, 144], [-395, 130], [-420, 130], [-420, 82], [-370, 82], [-370, 70]], { cap: SOW });
+walker(TRANSIT, [[-395, 144], [-395, 130], [-420, 130], [-420, 82], [-90, 82], [-90, 60]], { cap: FIN });
+finRows.forEach((cz, b) => walker(FIN, [[-188 + b * 6, cz], [-72, cz]], { y: 0.3, dwell: 5 }));
+walker(FIN, [[-90, 50], [-90, 46], [-185, 46]], {});
+station(FIN, -186, -32.5, 0, 'work');
+station(FIN, -199, 47.6, 0, 'work');
+station(FIN, -108, -66, -Math.PI / 2, 'work');
+station(FIN, -82, 30, Math.PI, 'work', 0.3);        // washing the empty room (dãy 4, phòng 5)
+station(WASTE, 5, -49, -Math.PI / 2, 'work');
+walker(WASTE, [[26, -32], [90, -32], [90, 8], [26, 8]], {});
+
+/* --- pig movements tied to trucks --- */
 const pigGeo = new THREE.SphereGeometry(0.5, 10, 8);
-for (const [x, z0, z1] of [[60, 163.8, 183], [300, -163.8, -183]]) {
-  for (let i = 0; i < 12; i++) { const m = new THREE.Mesh(pigGeo, M.pigSolid); m.scale.set(1.15, 0.53, 0.45); m.castShadow = true; world.add(m);
-    actors.push({ kind: 'pig', truck: x === 60 ? mkt1 : mkt2, m: new Mover(m, [[x, z0], [x, z1]], { loop: true, speed: 0.9, y: 0.6, start: i / 12 }) }); }
-  station(PODS[x === 60 ? 2 : 1].color, x + 1.6, z0 + Math.sign(z1) * 1.0, Math.sign(z1) > 0 ? -Math.PI / 2 : Math.PI / 2, 'work');
+function pigLine(pts, truck, n, scale, atStart = false) {
+  for (let i = 0; i < n; i++) { const m = new THREE.Mesh(pigGeo, M.pigSolid); m.scale.set(...scale); m.castShadow = true; world.add(m);
+    actors.push({ kind: 'pig', truck, atStart, m: new Mover(m, pts, { loop: true, speed: 0.8, y: scale[1] / 2 + 0.25, start: i / n }) }); }
 }
+pigLine([[-110, -53], [-110, -79]], mkt, 14, [1.15, 0.53, 0.45]);             // market pigs → truck (north)
+pigLine([[-212, 45], [-196, 45], [-191, 41]], xfer, 10, [0.75, 0.38, 0.32]);  // weaners into finisher (west)
+pigLine([[-345, 45], [-319, 45]], xfer, 10, [0.7, 0.36, 0.3], true);                 // weaners leaving sow site
 document.getElementById('kpiStaff').textContent = staff;
 
 /* ===================== FLOWS ===================== */
-const flows = [];
+flow([[-440, 180], [-440, 150], [-395, 144], [-420, 130], [-420, 82], [-370, 82], [-370, 65]], '#2f6fd6', 10);
+flow([[-420, 82], [-90, 82], [-90, 55]], '#2f6fd6', 10);
+flow([[-363, 32], [-322, 45], [-205, 45], [-129, 40]], '#f08fa0', 12);
+flow([[-110, -52], [-110, -84], [150, -84], [150, 186]], '#d64541');
+flow([[-440, 186], [-440, 79], [-220, 79], [-220, -57]], '#e8b100'); flow([[-440, 79], [-505, 79], [-505, -59]], '#e8b100');
+flow([[-330, -85], [-330, -100], [-30, -100], [-30, -62], [5, -55], [57, -15], [5, 30], [40, 30], [85, 35]], '#8a5a2b', 10);
+flow([[-50, -62], [-30, -62]], '#8a5a2b', 6);
+flow([[-150, -74], [-150, -84], [85, -84], [85, -94]], '#3a1f1f', 10);
+
+/* ===================== LABELS ===================== */
+label('Cụm 1 · Trại nái 600 con', -410, 26, -10, 'zone');
+label('Cụm 2 · Khu thịt 6.000 con', -128, 26, -8, 'zone');
+label('Hậu cần · cổng chính', -410, 20, 130, 'zone');
+label('Chất thải & biogas', 45, 22, -5, 'zone');
+label('Nước', -420, 14, -127, 'small');
+label('Cách ly hậu bị', -577, 8, 0); label('Cầu xuất cai sữa', -322, 4, 41); label('Cầu nhập khu thịt', -208, 4, 41); label('Đường chuyển heo nội bộ (sạch)', -265, 5, 49);
+label('Cầu xuất heo', -110, 4, -77); label('Đường bẩn · xe lái buôn, xe xác', 40, 5, -84); label('Nhà tắm khu thịt', -90, 7, 55); label('Nhà tắm trại nái', -370, 7, 65);
+label('Máy phát dự phòng', -60, 6, 46); label('Lò đốt xác', 85, 9, -94); label('Biogas ≈ 5.900 m³', 57, 6, -15); label('Phòng đang vệ sinh', -80, 5, 30);
+label('Sát trùng xe 3 cấp', -428, 7, 123); label('Cách ly 48 giờ', -395, 7, 150);
+const windMat = new THREE.MeshStandardMaterial({ color: '#e07a3a', transparent: true, opacity: 0.9 }); const windX = [-480, -260, -40], windArrows = [];
+for (const x of windX) { const a = new THREE.Group(); const s = new THREE.Mesh(cylGeo, windMat); s.scale.set(1.2, 50, 1.2); s.rotation.z = -Math.PI / 2; a.add(s);
+  const h = new THREE.Mesh(new THREE.ConeGeometry(4, 10, 16), windMat); h.rotation.z = -Math.PI / 2; h.position.x = 30; a.add(h); a.position.set(x, 50, -190); windG.add(a); windArrows.push(a); }
+label('Hướng gió chủ đạo: trại nái → khu thịt → xử lý chất thải (gió đổi mùa, nên có dải cây kép)', -260, 64, -190, 'wind', windG);
+{ const c = new THREE.Mesh(new THREE.ConeGeometry(5, 15, 3), std('#17212b')); c.rotation.x = -Math.PI / 2; c.position.set(-640, 1, -200); world.add(c); label('B (Bắc)', -640, 4, -215); }
+
+/* ===================== KEY POINTS ===================== */
+const IMPS = [
+  { t: 'Tỷ lệ cân bằng 600 nái : 6.000 chỗ thịt', p: [-260, 30, 0], v: [[-180, 300, 330], [-280, 0, 0]], h: 'Trại khép kín, tự cung 100% heo giống, chỉ 1 nguồn.',
+    l: ['280–300 heo cai sữa/tuần × ~20 tuần ≈ 6.000 chỗ', 'Xuất ≈ 13.500–14.500 con/năm (ước tính)', 'So với v2: không còn phụ thuộc trại vệ tinh, giảm hẳn rủi ro dịch từ bên ngoài'] },
+  { t: 'Sản xuất theo nhóm tuần', p: [-129, 10, -45], v: [[-100, 40, -5], [-130, 0, -20]], h: '1 phòng đẻ → 1 dãy cai sữa → 1 phòng thịt, Cùng vào – Cùng ra theo phòng.',
+    l: ['6 phòng đẻ × 24 ô, 8 dãy cai sữa × ~312, 20 phòng thịt × 300', 'Mở mái khu thịt để thấy 19 phòng có heo lớn dần và 1 phòng đang vệ sinh', 'Nhịp tuần giúp lịch vaccine, xuất bán và giao cám ổn định'] },
+  { t: 'Chuyển heo nội bộ một chiều', p: [-265, 10, 45], v: [[-262, 115, 170], [-265, 0, 40]], h: 'Đường chuyển heo sạch riêng, chỉ dùng cho xe nội bộ.',
+    l: ['Cầu xuất cai sữa ở hàng rào trại nái, cầu nhập ở hàng rào khu thịt', 'Xe chỉ chạy đoạn đường khoảng 120 m, không ra đường công cộng'] },
+  { t: 'Xuất heo qua đường bẩn', p: [-110, 10, -78], v: [[-72, 40, -122], [-110, 0, -70]], h: 'Xe lái buôn chỉ đứng ở đường bẩn phía bắc.',
+    l: ['Máng dồn từ dãy 1 ra cầu xuất', 'Không giao cắt với xe cám và đường chuyển heo nội bộ'] },
+  { t: 'Cách ly hậu bị nhập', p: [-577, 10, 0], v: [[-530, 60, 70], [-577, 0, 0]], h: 'Nguồn rủi ro duy nhất đi vào đàn: cách ly 4–6 tuần.', l: ['Hoặc tự sản xuất hậu bị từ đàn GGP/GP để khép kín hoàn toàn'] },
+  { t: 'Nhà tắm & đồng phục 2 màu', p: [-90, 10, 58], v: [[-60, 30, 100], [-90, 0, 60]], h: 'Trại nái navy, khu thịt xanh lá, không đi chéo giữa hai cụm.', l: ['Sau 48 giờ cách ly, mỗi người đi đúng tuyến đến cụm của mình'] },
+  { t: 'Điện dự phòng & nước', p: [-60, 8, 46], v: [[-40, 25, 75], [-62, 0, 44]], h: 'Máy phát dự phòng và báo động ở cả hai cụm; nước ước tính 100–150 m³/ngày.', l: ['Đèn đỏ nhấp nháy trên máy phát = hệ thống báo động'] },
+  { t: 'Chất thải tương xứng + lò đốt xác', p: [57, 10, -15], v: [[140, 110, 120], [40, 0, -10]], h: 'Biogas ≈ 5.900 m³ cho 90–150 m³ nước thải/ngày (ước tính).', l: ['Tách ép, biogas, Aerotank, hồ sinh học', 'Lò đốt xác nằm trên tuyến bẩn, cuối hướng gió'] },
+];
+
+
 function flow(pts, color, speed = 18) {
   const path = mkPath(pts), mat = new THREE.MeshBasicMaterial({ color }), n = Math.max(4, Math.round(path.L / 22)), dots = [];
   for (let i = 0; i < n; i++) { const d = new THREE.Mesh(new THREE.SphereGeometry(1.3, 10, 8), mat); flowG.add(d); dots.push(d); }
   const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(p => new THREE.Vector3(p[0], 4, p[1]))), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.55 }));
   flowG.add(line); flows.push({ path, dots, speed, n });
 }
-flow([[-280, 185], [-280, 90], [-245, 28], [-280, 0], [-280, -40], [-343, -40]], '#2f6fd6', 10);
-flow([[-245, 16], [-245, 2], [-25, 2], [-25, -20]], '#2f6fd6', 10);
-flow([[-245, 16], [-245, 2], [260, 2], [260, 20]], '#2f6fd6', 10);
-flow([[650, 185], [-235, 185], [-235, 146], [-200, 132], [-200, -2], [60, -2], [60, -22]], '#f08fa0');
-flow([[-200, -2], [300, -2], [300, 22]], '#f08fa0');
-flow([[60, 160], [60, 189], [650, 189]], '#d64541'); flow([[300, -160], [300, -184], [645, -184]], '#d64541');
-flow([[-240, -18], [-240, 3], [-168, 3], [-168, -145]], '#e8b100'); flow([[-240, 3], [117, 3], [117, -145]], '#e8b100'); flow([[117, 3], [402, 3], [402, 145]], '#e8b100');
-flow([[-330, -85], [-330, -195], [450, -195], [450, -96], [525, -50], [525, -10], [452, 75], [500, 75], [560, 100]], '#8a5a2b', 12);
-flow([[117, 170], [117, -195]], '#8a5a2b', 12);
-flow([[-120, -174], [-120, -182], [580, -182], [580, -150]], '#3a1f1f', 12); flow([[-120, 174], [-120, 182], [-172, 182]], '#3a1f1f', 12);
-
-/* ===================== LABELS ===================== */
-label('Cụm 1 · Trại nái 600 con', -410, 26, -10, 'zone');
-label('Vùng đệm & hậu cần', -248, 26, 60, 'zone');
-for (const P of PODS) label(`Khu thịt ${P.id} · 15.000 con`, P.cx, 28, P.cz, 'zone');
-label('Xử lý chất thải & năng lượng', 510, 26, 10, 'zone');
-label('Hành lang sạch · heo vào, xe cám', 230, 7, 0); label('Đường bẩn · xe lái buôn, xe xác', 330, 6, -180); label('Đường công cộng (bẩn)', 330, 6, 189);
-label('Cách ly hậu bị', -577, 8, 0); label('Hồ chứa & tháp nước', -380, 22, 130); label('Trung chuyển heo con', -235, 8, 146);
-label('Cổng chính · trạm cân', -265, 7, 162); label('Cách ly 48 giờ', -240, 8, 22); label('Kho cám tổng', -240, 13, -30);
-for (const P of PODS) { label(`Nhà tắm khu ${P.id}`, P.showerX, 7, P.sz * 22); label('Cầu nhập', P.rampX, 4, P.sz * 17); label('Cầu xuất', P.rampX, 4, P.sz * 176); label('Máy phát dự phòng', P.genX, 7, P.sz * 25.5); }
-label('Lò đốt xác', 580, 10, -146); label('Hầm 3 · dự phòng', 525, 6, 30); label('Tách ép 2 line', 450, 11, -90);
-/* wind */
-const windMat = new THREE.MeshStandardMaterial({ color: '#e07a3a', transparent: true, opacity: 0.9 }); const windArrows = [];
-for (const x of [-470, -120, 230]) { const a = new THREE.Group(); const s = new THREE.Mesh(cylGeo, windMat); s.scale.set(1.5, 70, 1.5); s.rotation.z = -Math.PI / 2; a.add(s);
-  const h = new THREE.Mesh(new THREE.ConeGeometry(5, 14, 16), windMat); h.rotation.z = -Math.PI / 2; h.position.x = 42; a.add(h); a.position.set(x, 70, -250); windG.add(a); windArrows.push(a); }
-label('Gió đổi theo mùa (Tây Nam ↔ Đông Bắc): không thể chỉ dựa vào vị trí "đầu gió", cần dải cây kép và lọc khí', -60, 88, -250, 'wind', windG);
-{ const c = new THREE.Mesh(new THREE.ConeGeometry(6, 18, 3), std('#17212b')); c.rotation.x = -Math.PI / 2; c.position.set(-640, 1, -260); world.add(c); label('B (Bắc)', -640, 4, -278); }
-
-/* ===================== IMPROVEMENTS ===================== */
-const IMPS = [
-  { t: 'Chia khu thịt thành 4 khu độc lập', p: [117, 34, -95], v: [[430, 360, -360], [117, 0, 0]], h: 'Một ổ dịch chỉ ảnh hưởng tối đa 15.000 con (25%) thay vì 60.000.',
-    l: ['4 khu × 12 dãy × 1.250 con, hàng rào riêng từng khu', 'Cùng vào – Cùng ra theo cả khu, mỗi khu nhận 1 nguồn heo', 'Hành lang 44 m có dải cây xanh tách các khu', 'Lệch pha khoảng 6 tuần giữa các khu, mỗi lần nhập 15.000 con trong 1–2 tuần (ước tính)'] },
-  { t: 'Trạm trung chuyển heo con', p: [-235, 12, 146], v: [[-160, 70, 230], [-225, 0, 135]], h: 'Xe heo từ trại vệ tinh không bao giờ vào trong trại.',
-    l: ['Xe ngoài đứng phía nam, xe nội bộ sạch đứng phía bắc', 'Ô tạm giữ, lấy mẫu xét nghiệm trước khi chuyển', 'Sát trùng cầu chuyển sau mỗi lượt'] },
-  { t: 'Luồng heo một chiều', p: [60, 10, 176], v: [[82, 16, 192], [60, 0, 175]], h: 'Heo vào từ hành lang sạch, heo ra qua cầu xuất ở hàng rào ngoài.',
-    l: ['Cầu nhập ở phía hành lang (giữa các khu)', 'Cầu xuất ở hàng rào ngoài, nằm trên đường bẩn', 'Xe lái buôn, xe cám và xe nội bộ không giao cắt nhau'] },
-  { t: 'Nhà tắm & đồng phục riêng từng khu', p: [-25, 10, -22], v: [[20, 24, -62], [-25, 0, -24]], h: 'Mỗi khu một màu đồng phục, không đi chéo giữa các khu.',
-    l: ['Nhà tắm xuyên hàng rào, đi một chiều từ bẩn sang sạch', 'Khu 1 xanh lá, Khu 2 xanh ngọc, Khu 3 ô liu, Khu 4 tím, trại nái navy', 'Sau 48 giờ cách ly, nhân sự đi đúng tuyến đến khu của mình'] },
-  { t: 'Chuồng cách ly hậu bị nhập', p: [-577, 10, 0], v: [[-530, 60, 70], [-577, 0, 0]], h: 'Hậu bị mới được cách ly 4–6 tuần ngoài hàng rào trại nái.',
-    l: ['Đây là lỗ hổng an toàn sinh học lớn nhất của cụm nái trong v1', 'Có nhân sự và dụng cụ riêng'] },
-  { t: 'Lò đốt xác & tuyến bẩn riêng', p: [580, 12, -146], v: [[620, 70, -60], [560, 0, -160]], h: 'Xác heo đi theo tuyến bẩn, không quay lại vùng sạch.',
-    l: ['Thùng chứa ở hàng rào ngoài từng khu', 'Xe kéo chạy đường bẩn phía bắc', 'Lò đốt cuối hướng gió'] },
-  { t: 'Máy phát dự phòng & báo động', p: [-110, 9, -25.5], v: [[-80, 30, 10], [-110, 0, -26]], h: 'Mất điện 30–60 phút trong chuồng kín có thể gây chết heo hàng loạt.',
-    l: ['Mỗi khu 1 máy phát diesel tự khởi động (ATS)', 'Báo động nhiệt độ và mất điện về điện thoại', 'Biogas chạy nền, diesel dự phòng'] },
-  { t: 'Hạ tầng nước', p: [-390, 24, 118], v: [[-330, 80, 220], [-390, 0, 118]], h: 'Nhu cầu ước tính 600–900 m³/ngày; brief chưa có hạng mục này.',
-    l: ['Giếng, nhà xử lý nước, hồ chứa, tháp nước', 'Đồng hồ nước theo từng khu'] },
-  { t: 'Nâng công suất xử lý chất thải', p: [525, 10, 30], v: [[650, 140, 140], [510, 0, 10]], h: 'Thiết kế theo kịch bản 600–1.200 m³/ngày thay vì 250–300.',
-    l: ['Tách ép 2 line', 'Hầm biogas số 3 dự phòng (+9.450 m³)', 'Đất dự phòng mở rộng Aerotank'] },
-  { t: 'Dải cây kép & lọc khí cho trại nái', p: [-410, 12, -100], v: [[-330, 110, -200], [-410, 0, -40]], h: 'Gió đổi theo mùa nên không thể chỉ dựa vào vị trí đầu hướng gió.',
-    l: ['Dải cây kép quanh trại nái', 'Lọc khí tại giàn cooling pad chuồng nái', 'Đường bẩn không còn chạy ngang trại nái'] },
-];
 const impList = document.getElementById('impList');
 IMPS.forEach((it, i) => {
-  const data = { zone: `Cải tiến #${i + 1}`, title: it.t, headline: it.h, lines: it.l };
+  const data = { zone: `Điểm chính #${i + 1}`, title: it.t, headline: it.h, lines: it.l };
   const go = () => { flyTo(it.v); showInfoData(data); };
   const li = document.createElement('li'); li.innerHTML = `<b>${i + 1}</b><span>${it.t}</span>`; li.onclick = go; impList.appendChild(li);
   const d = document.createElement('div'); d.className = 'imp'; d.textContent = i + 1; d.title = it.t; d.addEventListener('pointerdown', e => e.stopPropagation()); d.onclick = go;
@@ -779,15 +708,15 @@ document.getElementById('tgFlow').onchange = e => flowG.visible = e.target.check
 let animOn = true; document.getElementById('tgAnim').onchange = e => animOn = e.target.checked;
 
 const VIEWS = {
-  overview: [[-470, 760, 900], [-30, 0, 10], false],
+  overview: [[-450, 470, 610], [-195, 0, 10], false],
   sow: [[-300, 150, 150], [-415, 0, -15], false],
-  log: [[-150, 120, 230], [-245, 0, 60], false],
-  pods: [[430, 360, -360], [117, 0, 0], false],
-  waste: [[660, 160, 230], [510, 0, 10], false],
-  act1: [[20, 24, -62], [-25, 0, -24], false],
-  act2: [[82, 16, 192], [60, 0, 175], false],
-  act3: [[-160, 70, 230], [-225, 0, 135], false],
-  inFin: [[-60, 20, -18], [-90, 0, -41], true],
+  fin: [[-40, 120, 150], [-128, 0, -8], false],
+  log: [[-330, 110, 260], [-410, 0, 120], false],
+  waste: [[150, 110, 140], [45, 0, -10], false],
+  act1: [[-262, 115, 170], [-265, 0, 40], false],
+  act2: [[-72, 40, -122], [-110, 0, -70], false],
+  act3: [[-405, 30, 205], [-440, 0, 140], false],
+  inFin: [[-60, 55, 75], [-128, 0, -8], true],
   inFarrow: [[-412, 24, -6], [-436, 0, -34], true],
   inGest: [[-405, 16, -36], [-425, 0, -59], true],
 };
@@ -816,15 +745,15 @@ function loop() {
     for (const a of actors) {
       if (a.m) a.m.update(dt);
       if (a.kind === 'w') animWorker(a.w, a.m ? a.m.moving : false, a.task, dt);
-      else if (a.kind === 'pig') { a.m.obj.position.y = 0.6 + Math.abs(Math.sin(simT * 8 + a.m.s)) * 0.06; a.m.obj.visible = a.truck.wait > 0 && a.truck.s >= a.truck.path.L - 0.01; }
+      else if (a.kind === 'pig') { a.m.obj.position.y = a.m.y + Math.abs(Math.sin(simT * 8 + a.m.s)) * 0.05; a.m.obj.visible = a.truck.wait > 0 && (a.atStart ? a.truck.s <= 0.01 : a.truck.s >= a.truck.path.L - 0.01); }
     }
     for (const f of flows) f.dots.forEach((d, j) => { const p = sample(f.path, ((simT * f.speed) + j * f.path.L / f.n) % f.path.L); d.position.set(p.x, 4, p.z); });
   }
   const now = performance.now() / 1000;
-  windArrows.forEach((a, i) => a.position.x = [-470, -120, 230][i] + ((now * 18 + i * 20) % 60));
+  windArrows.forEach((a, i) => a.position.x = windX[i] + ((now * 16 + i * 20) % 50));
   flame.scale.setScalar(0.85 + Math.sin(now * 13) * 0.15);
   bubbles.forEach((b, i) => b.scale.setScalar(0.75 + 0.25 * Math.sin(now * 3 + i)));
-  for (const P of PODS) P.beacon.material.opacity = 0.35 + 0.65 * (Math.sin(now * 4 + P.id) > 0 ? 1 : 0.2);
+  beacon.material.opacity = Math.sin(now * 4) > 0 ? 1 : 0.25;
   for (const l of smallLabels) { l.getWorldPosition(tmp); l.visible = camera.position.distanceTo(tmp) < 430; }
   renderer.render(scene, camera); labelR.render(scene, camera);
   requestAnimationFrame(loop);
